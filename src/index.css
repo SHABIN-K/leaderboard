@@ -16,7 +16,6 @@
 
 /* **************************** Scroll Bar **************************** */
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-synthesis: none;
   background-color: #ffffff;
   text-rendering: optimizeLegibility;
@@ -86,18 +85,3 @@ img,
 }
 
 /* **************************** Selection & User Select None **************************** */
-
-/*
- @media (min-width: 325px) { 
-}
-@media (min-width: 639px) { 
-}
-@media (min-width: 767px) { 
-}
-@media (min-width: 1023px) { 
-}
-@media (min-width: 1279px) { 
-}
-@media (min-width: 1535px) { 
-}
-*/
