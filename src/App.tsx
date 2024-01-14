@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import data from "./utils/data.json";
 import { Table, TopCard } from "./components";
 import { generateConfetti } from "./utils/generateConfetti";
+import { teamCard } from "./utils";
 
 interface AppProps {}
 
@@ -26,21 +27,26 @@ const Header: React.FC = () => (
       <span className="mx-0.5 font-curlfont font-bold text-primarydark italic">
         {new Date(data.lastUpdated).toLocaleString("en-US", {
           dateStyle: "full",
-          timeStyle: "full",
+          timeStyle: "short",
         })}
       </span>
     </p>
   </div>
 );
 
-const HeroSection: React.FC = () => (
-  <div className="relative my-10 px-12 flex-center gap-8 lg:px-8 sm:px-2 md:flex-col">
-    <TopCard />
-    <TopCard />
-    <TopCard />
-    <TopCard />
-  </div>
-);
+const HeroSection: React.FC = () => {
+  const sortedTeamCard = [...teamCard].sort(
+    (a, b) => b.total_points - a.total_points
+  );
+
+  return (
+    <div className="relative my-10 px-12 flex-center gap-8 lg:px-8 sm:px-2 md:flex-col">
+      {sortedTeamCard.map((team, index) => (
+        <TopCard key={index} teamData={{ ...team, rank: index + 1 }} />
+      ))}
+    </div>
+  );
+};
 
 const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => (
   <div className="m-12 lg:mx-8 sm:mx-2">
