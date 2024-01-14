@@ -5,12 +5,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&display=swap");
 
-
 /* **************************** Site General Settings **************************** */
 
 * {
   margin: 0;
   padding: 0;
+}
+
+@font-face {
+  font-family: "Blanka";
+  src: url(./assets/Blanka.otf);
 }
 
 @tailwind base;
@@ -84,7 +88,6 @@ img,
 
 /* **************************** Selection & User Select None **************************** */
 
-@font-face {
-  font-family: "Blanka";
-  src: url(./assets/Blanka.otf);
+.flex-center {
+  @apply flex justify-center items-center;
 }
