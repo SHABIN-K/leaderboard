@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import Fuse from "fuse.js";
 
+import { teamCard } from "./utils";
 import data from "./utils/data.json";
 import { Table, TopCard } from "./components";
 import { generateConfetti } from "./utils/generateConfetti";
-import { teamCard } from "./utils";
 
 interface AppProps {}
 
@@ -13,9 +14,21 @@ interface SearchInputProps {
   onChange: React.ChangeEventHandler<HTMLInputElement>;
 }
 
+interface TableDataType {
+  user_name: string;
+  avatar_url: string;
+  user_url: string;
+  total_points: number;
+  full_name: string;
+  college: string;
+  rank: number;
+}
+
+
 const styleApp = {
   font: "font-medium text-lightblack font-codefont tracking-wide",
 };
+
 const Header: React.FC = () => (
   <div className="relative my-10 mx-auto flex-center flex-col text-center lg:mx-8 sm:mx-2">
     <h2 className="my-1.5 pt-0 px-2 pb-2 font-['Blanka'] text-[2rem] font-bold text-lightblack tracking-[4px] rounded-lg bg-[rgba(255,255,255,0.8)] shadow-[0_0_4px_rgba(50,69,107,0.2)] md:text-[1rem]">
@@ -61,16 +74,27 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => (
 );
 
 const App: React.FC<AppProps> = () => {
-  const [tableData, setTableData] = useState("");
-  const [searchText, setSearchText] = useState("");
-  // const [searchedData, setSearchedData] = useState<TableDataType[]>();
+  const [tableData, setTableData] = useState<TableDataType[]>([]);
+  const [searchText, setSearchText] = useState<string>("");
+  const [searchedData, setSearchedData] = useState<
+    TableDataType[] | undefined
+  >();
 
-  const handleSearch = () => {
-    console.log("no data found");
+  const handleSearch = (
+    e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setSearchText(e.target.value);
+    const fuse = new Fuse(data.data as TableDataType[], {
+      keys: ["user_name", "full_name", "college"],
+      threshold: 0.2,
+    });
+    const result = fuse.search(e.target.value).map((item) => item.item);
+    setSearchedData(result);
   };
 
   useEffect(() => {
     generateConfetti();
+    setTableData(data.data);
   }, []);
 
   return (
@@ -80,7 +104,9 @@ const App: React.FC<AppProps> = () => {
           <Header />
           <HeroSection />
           <SearchInput value={searchText} onChange={handleSearch} />
-          <Table />
+          <Table
+            data={searchText ? (searchedData as TableDataType[]) : tableData}
+          />
         </div>
       </section>
     </>
