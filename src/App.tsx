@@ -63,6 +63,7 @@ const HeroSection: React.FC = () => (
     <TopCard />
     <TopCard />
     <TopCard />
+    <TopCard />
   </div>
 );
 
