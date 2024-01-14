@@ -1,4 +1,4 @@
-import Table from "./Table/Table";
-import TopCard from "./TopCard/TopCard";
+import Table from "./Table";
+import TopCard from "./TopCard";
 
 export { TopCard, Table };
