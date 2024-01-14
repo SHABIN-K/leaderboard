@@ -13,38 +13,8 @@ interface SearchInputProps {
 }
 
 const styleApp = {
-  font: "font-medium text-lightblack tracking-wide font-codefont",
+  font: "font-medium text-lightblack font-codefont tracking-wide",
 };
-
-const App: React.FC<AppProps> = () => {
-  const [tableData, setTableData] = useState("");
-  const [searchText, setSearchText] = useState("");
-  // const [searchedData, setSearchedData] = useState<TableDataType[]>();
-
-  const handleSearch = () => {
-    console.log("no data found");
-  };
-
-  useEffect(() => {
-    generateConfetti();
-  }, []);
-
-  return (
-    <>
-      <section className="relative mx-auto mt-32 mb-12">
-        <div className="px-5 lg:px-0">
-          <Header />
-          <HeroSection />
-          <SearchInput value={searchText} onChange={handleSearch} />
-          <Table />
-        </div>
-      </section>
-    </>
-  );
-};
-
-export default App;
-
 const Header: React.FC = () => (
   <div className="relative my-10 mx-auto flex-center flex-col text-center lg:mx-8 sm:mx-2">
     <h2 className="my-1.5 pt-0 px-2 pb-2 font-['Blanka'] text-[2rem] font-bold text-lightblack tracking-[4px] rounded-lg bg-[rgba(255,255,255,0.8)] shadow-[0_0_4px_rgba(50,69,107,0.2)] md:text-[1rem]">
@@ -76,10 +46,39 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => (
   <div className="m-12 lg:mx-8 sm:mx-2">
     <input
       type="search"
-      className={`h-14 w-full p-3 text-lg shadow focus:outline-none border-[3px] border-darkgrey rounded-lg ${styleApp.font}`}
+      className={`h-14 w-full p-3 text-lg shadow focus:outline-none border-[3px] border-darkgrey rounded-lg ${styleApp.font}r`}
       placeholder="Search for student Name"
       value={value}
       onChange={onChange}
     />
   </div>
 );
+
+const App: React.FC<AppProps> = () => {
+  const [tableData, setTableData] = useState("");
+  const [searchText, setSearchText] = useState("");
+  // const [searchedData, setSearchedData] = useState<TableDataType[]>();
+
+  const handleSearch = () => {
+    console.log("no data found");
+  };
+
+  useEffect(() => {
+    generateConfetti();
+  }, []);
+
+  return (
+    <>
+      <section className="relative mx-auto mt-32 mb-12">
+        <div className="px-5 lg:px-0">
+          <Header />
+          <HeroSection />
+          <SearchInput value={searchText} onChange={handleSearch} />
+          <Table />
+        </div>
+      </section>
+    </>
+  );
+};
+
+export default App;
