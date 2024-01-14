@@ -69,7 +69,7 @@ const App: React.FC<AppProps> = () => {
 
   return (
     <>
-      <section className="relative mx-auto mt-32 mb-12">
+      <section className="relative mx-auto mt-24 mb-12">
         <div className="px-5 lg:px-0">
           <Header />
           <HeroSection />
