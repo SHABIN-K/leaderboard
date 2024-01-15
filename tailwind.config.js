@@ -30,6 +30,7 @@ export default {
         mainfont: ["Inter", "sans-serif"],
         codefont: ["Outfit", "sans-serif"],
         curlfont: ["Quicksand", "sans-serif"],
+        mallufont: ["Chilanka", "cursive"],
       },
     },
   },

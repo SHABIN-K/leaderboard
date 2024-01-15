@@ -40,7 +40,7 @@ const TopCard: React.FC<{ teamData: TeamDataType }> = ({ teamData }) => {
             className="w-full h-full user_image"
           />
         </div>
-        <h1 className="my-2 mx-auto text-2xl font-medium font-codefont text-darkblack text-center tracking-[0.8px] capitalize">
+        <h1 className="my-2 mx-auto text-4xl font-mallufont text-darkblack text-center tracking-[-0.05em]">
           {teamData.name}
         </h1>
         <button className="m-auto mb-1.5 px-3 py-1 text-lg font-bold font-curlfont text-sky-600 bg-sky-100 hover:bg-sky-200 text-center rounded-full transition">
