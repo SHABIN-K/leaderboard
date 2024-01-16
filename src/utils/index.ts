@@ -1,8 +1,8 @@
 export const teamCard = [
   {
-    name: "പഞ്ചവാദ്യർ",
+    name: "പഞ്ചവാദ്യം",
     logo: "/team_logo.png",
-    total_points: 253,
+    total_points: 420,
   },
   {
     name: "പടയണി",

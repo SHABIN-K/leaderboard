@@ -13,8 +13,8 @@
 }
 
 @font-face {
-  font-family: "Blanka";
-  src: url(./assets/Blanka.otf);
+  font-family: "sadhise";
+  src: url(./assets/sadhise.regular.ttf);
 }
 
 @tailwind base;

@@ -27,6 +27,9 @@ const TableHeader = () => {
           Participant&apos;s name
         </th>
         <th className={`${styleTableHeader.lgTextSm} ${styleTableHeader.cell}`}>
+          Department
+        </th>
+        <th className={`${styleTableHeader.lgTextSm} ${styleTableHeader.cell}`}>
           Item
         </th>
         <th className={`${styleTableHeader.lgTextSm} ${styleTableHeader.cell}`}>
@@ -60,11 +63,16 @@ const UserCard = ({ data, index }: { data: userDataType; index: number }) => {
             </p>
             <p className="font-curlfont text-base md:text-sm font-semibold text-darkgrey ">
               {teamCard[Math.floor(Math.random() * teamCard.length)].name || (
-                <span className="text-warningoff">College not found...</span>
+                <span className="text-warningoff">team not found...</span>
               )}
             </p>
           </div>
         </div>
+      </td>
+      <td className="p-5 border-b border-gray-200 bg-darkwhite">
+      <p className="font-mainfont text-lg font-medium text-darkgrey text-center">
+          Bca
+        </p>
       </td>
       <td className="p-5 border-b border-gray-200 bg-darkwhite">
         <a className="py-1 px-4 font-codefont text-base font-medium text-lightblack bg-primaryoff rounded-lg tracking-wide text-center">
