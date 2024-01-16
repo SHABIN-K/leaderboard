@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { ChangeEvent, useEffect, useState } from "react";
 import Fuse from "fuse.js";
+import React, { ChangeEvent, useEffect, useState } from "react";
 
 import { teamCard } from "./utils";
 import data from "./utils/data.json";
@@ -23,7 +23,6 @@ interface TableDataType {
   college: string;
   rank: number;
 }
-
 
 const styleApp = {
   font: "font-medium text-lightblack font-codefont tracking-wide",
