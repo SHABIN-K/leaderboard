@@ -7,9 +7,9 @@ const colors = ["#ff1700", "#5800ff"];
 export const generateConfetti = () => {
   (function frame() {
     confetti({
-      particleCount: 6,
-      angle: 60,
-      spread: 1000,
+      particleCount: 5,
+      angle: 180,
+      spread: 800,
       origin: { y: 0 },
       colors: colors,
       shapes: ["circle", "square"],
