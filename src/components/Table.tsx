@@ -1,8 +1,8 @@
+import { TbHttpDelete } from "react-icons/tb";
 import { useLocation } from "react-router-dom";
+
 import { teamCard } from "../utils";
 import { TableDataType } from "../types";
-import { TbHttpDelete } from "react-icons/tb";
-import { AiFillAlert } from "react-icons/ai";
 
 const TableHeader = ({ pathname }: { pathname: string }) => {
   const styleTableHeader = {
@@ -11,7 +11,6 @@ const TableHeader = ({ pathname }: { pathname: string }) => {
     lgTextSm: "lg:text-sm",
     xsHidden: "xs:hidden",
   };
-  console.log(pathname === "/dashboard");
 
   return (
     <thead>

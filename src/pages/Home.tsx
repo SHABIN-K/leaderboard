@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import Fuse from "fuse.js";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { teamCard } from "../utils";
 import data from "../utils/data.json";
+import { TableDataType } from "../types";
 import { SearchInput, Table, TopCard } from "../components";
 import { generateConfetti } from "../utils/generateConfetti";
-import { TableDataType } from "../types";
 
 interface AppProps {}
 
@@ -64,7 +62,11 @@ const Home: React.FC<AppProps> = () => {
         <div className="px-5 lg:px-0">
           <Header />
           <HeroSection />
-          <SearchInput value={searchText}  setSearchText={setSearchText} setSearchedData={setSearchedData}/>
+          <SearchInput
+            value={searchText}
+            setSearchText={setSearchText}
+            setSearchedData={setSearchedData}
+          />
           <Table
             data={searchText ? (searchedData as TableDataType[]) : tableData}
           />
