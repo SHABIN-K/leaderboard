@@ -4,25 +4,11 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 
 import { teamCard } from "../utils";
 import data from "../utils/data.json";
-import { Table, TopCard } from "../components";
+import { SearchInput, Table, TopCard } from "../components";
 import { generateConfetti } from "../utils/generateConfetti";
+import { TableDataType } from "../types";
 
 interface AppProps {}
-
-interface SearchInputProps {
-  value: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-}
-
-interface TableDataType {
-  user_name: string;
-  avatar_url: string;
-  user_url: string;
-  total_points: number;
-  full_name: string;
-  college: string;
-  rank: number;
-}
 
 const styleApp = {
   font: "font-medium text-lightblack font-codefont tracking-wide",
@@ -60,36 +46,12 @@ const HeroSection: React.FC = () => {
   );
 };
 
-const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => (
-  <div className="m-12 lg:mx-8 sm:mx-2">
-    <input
-      type="search"
-      className={`h-14 w-full p-3 text-lg shadow focus:outline-none border-[3px] border-darkgrey rounded-lg ${styleApp.font}r`}
-      placeholder="Search for student Name"
-      value={value}
-      onChange={onChange}
-    />
-  </div>
-);
-
 const Home: React.FC<AppProps> = () => {
   const [tableData, setTableData] = useState<TableDataType[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchedData, setSearchedData] = useState<
     TableDataType[] | undefined
   >();
-
-  const handleSearch = (
-    e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setSearchText(e.target.value);
-    const fuse = new Fuse(data.data as TableDataType[], {
-      keys: ["user_name", "full_name", "college"],
-      threshold: 0.2,
-    });
-    const result = fuse.search(e.target.value).map((item) => item.item);
-    setSearchedData(result);
-  };
 
   useEffect(() => {
     generateConfetti();
@@ -102,7 +64,7 @@ const Home: React.FC<AppProps> = () => {
         <div className="px-5 lg:px-0">
           <Header />
           <HeroSection />
-          <SearchInput value={searchText} onChange={handleSearch} />
+          <SearchInput value={searchText}  setSearchText={setSearchText} setSearchedData={setSearchedData}/>
           <Table
             data={searchText ? (searchedData as TableDataType[]) : tableData}
           />

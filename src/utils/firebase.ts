@@ -1,4 +1,6 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+ 
 
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -13,4 +15,5 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const db = initializeApp(firebaseConfig);
+ const app = initializeApp(firebaseConfig);
+ export const auth = getAuth(app);

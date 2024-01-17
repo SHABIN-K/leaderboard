@@ -14,15 +14,6 @@ export const generateConfetti = () => {
       colors: colors,
       shapes: ["circle", "square"],
     });
-  //confetti({
-  //  particleCount: 2,
-  //  angle: 120,
-  //  spread: 100,
-  //  origin: { x: 1 },
-  //  colors: colors,
-  //  shapes: ["circle", "square"],
-  //});
-
     if (Date.now() < end) {
       requestAnimationFrame(frame);
     }
