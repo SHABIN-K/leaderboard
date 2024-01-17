@@ -1,22 +1,16 @@
+import { useLocation } from "react-router-dom";
 import { teamCard } from "../utils";
+import { TableDataType } from "../types";
 
-interface userDataType {
-  user_name: string;
-  avatar_url: string;
-  user_url: string;
-  total_points: number;
-  full_name: string;
-  college: string;
-  rank: number;
-}
-
-const TableHeader = () => {
+const TableHeader = ({ pathname }: { pathname: string }) => {
   const styleTableHeader = {
     cell: "px-4 py-5 border-b-2 border-gray-200 bg-lightblack text-base font-semibold text-darkwhite uppercase tracking-wider text-left",
     lgHidden: "lg:hidden",
     lgTextSm: "lg:text-sm",
     xsHidden: "xs:hidden",
   };
+  console.log(pathname === "/dashboard");
+
   return (
     <thead>
       <tr>
@@ -35,17 +29,27 @@ const TableHeader = () => {
         <th className={`${styleTableHeader.lgTextSm} ${styleTableHeader.cell}`}>
           prize
         </th>
-        <th
-          className={`${styleTableHeader.lgTextSm} ${styleTableHeader.xsHidden} ${styleTableHeader.cell}`}
-        >
-          Certificate
-        </th>
+        {pathname !== "/dashboard" && (
+          <th
+            className={`${styleTableHeader.lgTextSm} ${styleTableHeader.xsHidden} ${styleTableHeader.cell}`}
+          >
+            Certificate
+          </th>
+        )}
       </tr>
     </thead>
   );
 };
 
-const UserCard = ({ data, index }: { data: userDataType; index: number }) => {
+const UserCard = ({
+  data,
+  index,
+  pathname,
+}: {
+  data: TableDataType;
+  index: number;
+  pathname: string;
+}) => {
   return (
     <tr>
       <td className="p-5 border-b border-gray-200 bg-darkwhite lg:hidden">
@@ -70,7 +74,7 @@ const UserCard = ({ data, index }: { data: userDataType; index: number }) => {
         </div>
       </td>
       <td className="p-5 border-b border-gray-200 bg-darkwhite">
-      <p className="font-mainfont text-lg font-medium text-darkgrey text-center">
+        <p className="font-mainfont text-lg font-medium text-darkgrey text-center">
           Bca
         </p>
       </td>
@@ -84,24 +88,33 @@ const UserCard = ({ data, index }: { data: userDataType; index: number }) => {
           #{["first", "second", "third"][Math.floor(Math.random() * 3)]}
         </p>
       </td>
-      <td className="p-5 border-b text-right border-gray-200 bg-darkwhite">
-        <p className="py-1 px-3 cursor-pointer font-curlfont text-base font-bold text-lightblack w-fit hover:text-darkwhite hover:bg-primarylight transition rounded-lg text-center">
-          view
-        </p>
-      </td>
+      {pathname !== "/dashboard" && (
+        <td className="p-5 border-b text-right border-gray-200 bg-darkwhite">
+          <p className="py-1 px-3 cursor-pointer font-curlfont text-base font-bold text-lightblack w-fit hover:text-darkwhite hover:bg-primarylight transition rounded-lg text-center">
+            view
+          </p>
+        </td>
+      )}
     </tr>
   );
 };
 
-const Table = ({ data }: { data: userDataType[] }) => {
+const Table = ({ data }: { data: TableDataType[] }) => {
+  const { pathname } = useLocation();
+
   return (
     <div className="container my-4 px-12 lg:px-8 sm:px-2">
       <div className="shadow-[0_0_2px_rgba(50,69,107,0.4)] rounded-lg overflow-auto">
         <table className="w-full table-auto">
-          <TableHeader />
+          <TableHeader pathname={pathname} />
           <tbody>
             {data.map((user, index) => (
-              <UserCard key={index} data={user} index={index} />
+              <UserCard
+                key={index}
+                data={user}
+                index={index}
+                pathname={pathname}
+              />
             ))}
           </tbody>
         </table>
