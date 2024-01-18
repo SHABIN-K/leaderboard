@@ -7,6 +7,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 
+const Header: React.FC = () => (
+  <div className="relative my-10 mx-auto flex-center flex-col text-center lg:mx-8 sm:mx-2">
+    hell world
+  </div>
+);
 const DashBoard = () => {
   const navigate = useNavigate();
 
@@ -33,6 +38,7 @@ const DashBoard = () => {
 
   return (
     <div>
+      <Header />
       <SearchInput
         value={searchText}
         setSearchText={setSearchText}

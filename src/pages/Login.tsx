@@ -1,10 +1,10 @@
+import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
 import { auth } from "../utils";
 import { FormInput } from "../components";
-import { toast } from "sonner";
 
 const styleLogin = {
   mainCell: "relative mt-6",
