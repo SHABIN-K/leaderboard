@@ -1,6 +1,6 @@
 import confetti from "canvas-confetti";
 
-const end = Date.now() + 5 * 1000;
+const end = Date.now() + 3 * 1000;
 
 const colors = ["#ff1700", "#5800ff"];
 
