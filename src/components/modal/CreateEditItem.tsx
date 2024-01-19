@@ -1,11 +1,32 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { FaXmark } from "react-icons/fa6";
-import { FormButtons, FormInput, WaitingLoader } from "../ui";
+import { FormButtons, FormInput } from "../ui";
 
-const CreateEditItem = ({
+interface CreateEditItemProps {
+  isOpen: boolean;
+  onClose: (value: boolean) => void;
+  onSave: (
+    formData: FormData,
+    setFormData: React.Dispatch<React.SetStateAction<FormData>>
+  ) => void;
+  isLoading: boolean;
+  title: string;
+  btnLabel: string;
+  data: FormData;
+}
+
+interface FormData {
+  name: string;
+  department: string;
+  team: string;
+  item: string;
+  prize: string;
+}
+
+const CreateEditItem: React.FC<CreateEditItemProps> = ({
   isOpen,
   onClose,
   onSave,
@@ -14,42 +35,40 @@ const CreateEditItem = ({
   btnLabel,
   data,
 }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
-    userName: "",
-    about: "",
-    email: "",
-    phonenumber: "",
-    location: "",
+    department: "",
+    team: "",
+    item: "",
+    prize: "",
   });
 
   useEffect(() => {
     if (data) {
       setFormData({
         name: data?.name || "",
-        userName: data?.userName || "",
-        about: data?.about || "",
-        email: data?.email || "",
-        phonenumber: data?.phoneNumber || "",
-        location: data?.location || "",
+        department: data?.department || "",
+        team: data?.team || "",
+        item: data?.item || "",
+        prize: data?.prize || "",
       });
     } else {
       setFormData({
         name: "",
-        userName: "",
-        about: "",
-        email: "",
-        phonenumber: "",
-        location: "",
+        department: "",
+        team: "",
+        item: "",
+        prize: "",
       });
     }
   }, [data]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-
   function handleSave() {
     onSave(formData, setFormData);
   }
@@ -86,7 +105,7 @@ const CreateEditItem = ({
             >
               <Dialog.Panel className="w-full max-w-sm transform rounded-2xl bg-white dark:bg-gray-800 py-2 transition-all cursor-default pointer-events-auto mx-auto relative shadow-xl">
                 <div className="absolute top-2 right-2 rtl:right-auto rtl:left-2 ">
-                  <FaXmark  className="icon" onClick={closeModal} />
+                  <FaXmark className="icon" onClick={closeModal} />
                 </div>
 
                 <div className="p-2 md:mx-3">
@@ -101,6 +120,7 @@ const CreateEditItem = ({
                   <div className="p-1">
                     <div className="flex flex-col space-y-1">
                       <FormInput
+                        mainClass="dsdfs"
                         label="Name"
                         type="text"
                         name="name"
@@ -111,54 +131,44 @@ const CreateEditItem = ({
                         classInput="input_form"
                       />
                       <FormInput
+                        mainClass="dsdfs"
                         label="User name"
                         type="text"
                         name="userName"
-                        value={
-                          formData.userName
-                            ? formData.userName.toLowerCase().trim()
-                            : ""
-                        }
+                        value={formData.department}
                         placeholder="Enter your shop user name"
                         onChange={handleInputChange}
                         classLabel="label_form"
                         classInput="input_form"
                       />
-                      <>
-                        <label className="label_form">About</label>
-                        <textarea
-                          name="about"
-                          rows="2"
-                          className="input_form"
-                          placeholder="Write Shop description here"
-                          value={formData.about}
-                          onChange={handleInputChange}
-                        />
-                      </>
                       <FormInput
+                        mainClass="dsdfs"
                         label="Email"
                         type="email"
                         name="email"
-                        value={formData.email}
+                        value={formData.team}
                         placeholder="Enter shop email"
                         onChange={handleInputChange}
                         classLabel="label_form"
                         classInput="input_form"
                       />
                       <FormInput
+                        mainClass="dsdfs"
                         label="Contact Number"
                         type="tel"
                         name="phonenumber"
-                        value={formData.phonenumber}
+                        value={formData.item}
+                        placeholder="Email Address"
                         onChange={handleInputChange}
                         classLabel="label_form"
                         classInput="input_form"
                       />
                       <FormInput
+                        mainClass="dsdfs"
                         label="Location"
                         type="text"
                         name="location"
-                        value={formData.location}
+                        value={formData.prize}
                         placeholder="No 43,Road name,city"
                         onChange={handleInputChange}
                         classLabel="label_form"
@@ -175,13 +185,7 @@ const CreateEditItem = ({
                     secondaryClass="btn_form"
                     secondaryLabelClass="flex items-center"
                     primaryLabelClass="flex items-center"
-                    primaryLabel={
-                      isLoading ? (
-                        <WaitingLoader size={15} color="#fffff" />
-                      ) : (
-                        btnLabel
-                      )
-                    }
+                    primaryLabel={isLoading ? "Loading..." : btnLabel}
                     secondaryLabel="cancel"
                     onPrimaryClick={handleSave}
                     onSecondaryClick={closeModal}
