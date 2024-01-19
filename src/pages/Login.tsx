@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
 import { auth } from "../utils";
-import { FormInput } from "../components";
+import { FormInput } from "../components/ui";
 
 const styleLogin = {
   mainCell: "relative mt-6",
