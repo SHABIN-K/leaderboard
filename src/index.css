@@ -15,7 +15,7 @@
 
 @font-face {
   font-family: "sadhise";
-  src: url(./assets/sadhise.regular.ttf);
+  src: url(./assets/sadhise.regular.woff2) format("truetype");
 }
 
 @tailwind base;
