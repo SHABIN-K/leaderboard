@@ -6,7 +6,7 @@ import { FaXmark } from "react-icons/fa6";
 import { FormButtons, FormInput } from "../ui";
 
 interface CreateEditItemProps {
-  isOpen: boolean;
+  onOpen: boolean;
   onClose: (value: boolean) => void;
   onSave: (
     formData: FormData,
@@ -15,7 +15,7 @@ interface CreateEditItemProps {
   isLoading: boolean;
   title: string;
   btnLabel: string;
-  data: FormData;
+  data?: FormData;
 }
 
 interface FormData {
@@ -27,7 +27,7 @@ interface FormData {
 }
 
 const CreateEditItem: React.FC<CreateEditItemProps> = ({
-  isOpen,
+  onOpen,
   onClose,
   onSave,
   isLoading,
@@ -35,6 +35,7 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
   btnLabel,
   data,
 }) => {
+  
   const [formData, setFormData] = useState<FormData>({
     name: "",
     department: "",
@@ -78,7 +79,7 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
   }
 
   return (
-    <Transition appear show={isOpen} as={Fragment}>
+    <Transition appear show={onOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
         <Transition.Child
           as={Fragment}
@@ -103,7 +104,7 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-sm transform rounded-2xl bg-white dark:bg-gray-800 py-2 transition-all cursor-default pointer-events-auto mx-auto relative shadow-xl">
+              <Dialog.Panel className="w-full max-w-sm transform rounded-2xl bg-white py-2 transition-all cursor-default pointer-events-auto mx-auto relative shadow-xl">
                 <div className="absolute top-2 right-2 rtl:right-auto rtl:left-2 ">
                   <FaXmark className="icon" onClick={closeModal} />
                 </div>
@@ -148,28 +149,6 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
                         name="email"
                         value={formData.team}
                         placeholder="Enter shop email"
-                        onChange={handleInputChange}
-                        classLabel="label_form"
-                        classInput="input_form"
-                      />
-                      <FormInput
-                        mainClass="dsdfs"
-                        label="Contact Number"
-                        type="tel"
-                        name="phonenumber"
-                        value={formData.item}
-                        placeholder="Email Address"
-                        onChange={handleInputChange}
-                        classLabel="label_form"
-                        classInput="input_form"
-                      />
-                      <FormInput
-                        mainClass="dsdfs"
-                        label="Location"
-                        type="text"
-                        name="location"
-                        value={formData.prize}
-                        placeholder="No 43,Road name,city"
                         onChange={handleInputChange}
                         classLabel="label_form"
                         classInput="input_form"

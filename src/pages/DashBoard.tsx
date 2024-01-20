@@ -2,6 +2,7 @@ import { auth } from "../utils";
 import data from "../utils/data.json";
 import { TableDataType } from "../types";
 import { SearchInput, Table } from "../components";
+import { CreateEditItem } from "../components/modal";
 
 import { useEffect, useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
@@ -55,6 +56,9 @@ const DashBoard = () => {
     TableDataType[] | undefined
   >();
 
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
       if (authUser) {
@@ -70,6 +74,11 @@ const DashBoard = () => {
     };
   }, [navigate]);
 
+  const onCreate = () => {
+    console.log("hello create");
+    setIsLoading(false);
+  };
+
   return (
     <div>
       <Header navigate={navigate} />
@@ -78,7 +87,10 @@ const DashBoard = () => {
           <IoMdAdd className="w-4 h-4" />
           Create Team
         </button>
-        <button className={styleDashboard.addbtn}>
+        <button
+          onClick={() => setIsAddOpen(true)}
+          className={styleDashboard.addbtn}
+        >
           <IoMdAdd className="w-4 h-4" />
           Add item
         </button>
@@ -91,6 +103,16 @@ const DashBoard = () => {
       <Table
         data={searchText ? (searchedData as TableDataType[]) : tableData}
       />
+      {isAddOpen && (
+        <CreateEditItem
+          onOpen={isAddOpen}
+          onClose={setIsAddOpen}
+          onSave={onCreate}
+          isLoading={isLoading}
+          title="Add new prize"
+          btnLabel="Add"
+        />
+      )}
     </div>
   );
 };
