@@ -1,10 +1,11 @@
 "use client";
 
-import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import React, { Fragment, useEffect, useState } from "react";
 
-import { styleForm } from "../../styles";
+import ComboBox from "../ui/ComboBox";
 import { FormButtons, FormInput } from "../ui";
+import { departmentData, itemsData, prizeData, teamData } from ".";
 
 interface CreateEditItemProps {
   onOpen: boolean;
@@ -27,6 +28,12 @@ interface FormData {
   prize: string;
 }
 
+const styleCreateEditItem = {
+  classlabel: "text-black font-medium md:font-semibold",
+  classInput:
+    "w-full bg-gray-100 py-2 pl-3 pr-10 text-sm text-black font-medium",
+};
+
 const CreateEditItem: React.FC<CreateEditItemProps> = ({
   onOpen,
   onClose,
@@ -36,6 +43,11 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
   btnLabel,
   data,
 }) => {
+  const [team, setTeam] = useState(teamData[0]);
+  const [department, setDepartment] = useState(departmentData[0]);
+  const [item, setItem] = useState(itemsData[0]);
+  const [rank, setRank] = useState(prizeData[0]);
+
   const [formData, setFormData] = useState<FormData>({
     name: "",
     department: "",
@@ -73,7 +85,6 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
   function handleSave() {
     onSave(formData, setFormData);
   }
-
   function closeModal() {
     onClose(false);
   }
@@ -118,36 +129,52 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
                     <div className="flex flex-col space-y-1">
                       <FormInput
                         mainClass="relative"
-                        label="Student name"
                         type="text"
                         name="name"
                         value={formData.name}
                         placeholder="Enter student name"
                         onChange={handleInputChange}
-                        classLabel="label_form"
                         classInput="input_form"
                       />
-                      <FormInput
-                        mainClass="dsdfs"
-                        label="User name"
-                        type="text"
-                        name="userName"
-                        value={formData.department}
-                        placeholder="Enter your shop user name"
-                        onChange={handleInputChange}
-                        classLabel="label_form"
-                        classInput="input_form"
+                      <ComboBox
+                        value={team}
+                        onChange={setTeam}
+                        data={teamData}
+                        label="Select Team"
+                        zIndex={5}
+                        classLabel={styleCreateEditItem.classlabel}
+                        classInput={styleCreateEditItem.classInput}
+                        isloading={false}
                       />
-                      <FormInput
-                        mainClass="dsdfs"
-                        label="Email"
-                        type="email"
-                        name="email"
-                        value={formData.team}
-                        placeholder="Enter shop email"
-                        onChange={handleInputChange}
-                        classLabel="label_form"
-                        classInput="input_form"
+                      <ComboBox
+                        value={department}
+                        onChange={setDepartment}
+                        data={departmentData}
+                        label="Select Department"
+                        zIndex={5}
+                        classLabel={styleCreateEditItem.classlabel}
+                        classInput={styleCreateEditItem.classInput}
+                        isloading={false}
+                      />
+                      <ComboBox
+                        value={item}
+                        onChange={setItem}
+                        data={itemsData}
+                        label="Select Item"
+                        zIndex={5}
+                        classLabel={styleCreateEditItem.classlabel}
+                        classInput={styleCreateEditItem.classInput}
+                        isloading={false}
+                      />
+                      <ComboBox
+                        value={rank}
+                        onChange={setRank}
+                        data={prizeData}
+                        label="Select Rank"
+                        zIndex={5}
+                        classLabel={styleCreateEditItem.classlabel}
+                        classInput={styleCreateEditItem.classInput}
+                        isloading={false}
                       />
                     </div>
                   </div>

@@ -99,7 +99,7 @@ const DashBoard = () => {
           onClose={setIsAddOpen}
           onSave={onCreate}
           isLoading={isLoading}
-          title="Add new prize"
+          title="Add student details"
           btnLabel="Add"
         />
       )}

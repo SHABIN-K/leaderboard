@@ -2,7 +2,7 @@ import React, { ChangeEvent } from "react";
 
 interface FormInputProps {
   mainClass: string;
-  label: string;
+  label?: string;
   type: string;
   name: string;
   value: string;
