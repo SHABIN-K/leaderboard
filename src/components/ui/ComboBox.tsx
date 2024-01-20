@@ -1,23 +1,17 @@
 import { Combobox, Transition } from "@headlessui/react";
 import { Dispatch, FC, Fragment, SetStateAction, useState } from "react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-
 import { WaitingLoader } from ".";
 
 interface ComboBoxProps {
-  value: { id: number; name: string };
-  onChange: Dispatch<SetStateAction<{ id: number; name: string }>>;
-  data: { id: number; name: string }[];
+  value: { name: string };
+  onChange: Dispatch<SetStateAction<{ name: string }>>;
+  data: { name: string }[];
   label: string;
   zIndex: number;
   classLabel: string;
   classInput: string;
   isloading: boolean;
-}
-
-interface DataItem {
-  id: string;
-  name: string;
 }
 
 const ComboBox: FC<ComboBoxProps> = ({
@@ -50,7 +44,7 @@ const ComboBox: FC<ComboBoxProps> = ({
           <div className="relative w-full cursor-text overflow-hidden rounded-lg text-left border-black">
             <Combobox.Input
               className={classInput}
-              displayValue={(data: DataItem) => data.name}
+              displayValue={(data: { name: string }) => data.name}
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -84,9 +78,9 @@ const ComboBox: FC<ComboBoxProps> = ({
                   Nothing found.
                 </div>
               ) : (
-                filteredData.map((data) => (
+                filteredData.map((data, index) => (
                   <Combobox.Option
-                    key={data.id}
+                    key={index}
                     className={({ active }) =>
                       `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
                         active ? "bg-blue-400 text-white" : "text-gray-900"

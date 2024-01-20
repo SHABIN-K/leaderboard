@@ -1,5 +1,3 @@
-"use client";
-
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useEffect, useState } from "react";
 
@@ -43,37 +41,22 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
   btnLabel,
   data,
 }) => {
-  const [team, setTeam] = useState(teamData[0]);
-  const [department, setDepartment] = useState(departmentData[0]);
-  const [item, setItem] = useState(itemsData[0]);
-  const [rank, setRank] = useState(prizeData[0]);
-
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    department: "",
-    team: "",
-    item: "",
-    prize: "",
+    department: departmentData[0]?.name ?? "",
+    team: teamData[0]?.name ?? "",
+    item: itemsData[0]?.name ?? "",
+    prize: prizeData[0]?.name ?? "",
   });
 
   useEffect(() => {
-    if (data) {
-      setFormData({
-        name: data?.name || "",
-        department: data?.department || "",
-        team: data?.team || "",
-        item: data?.item || "",
-        prize: data?.prize || "",
-      });
-    } else {
-      setFormData({
-        name: "",
-        department: "",
-        team: "",
-        item: "",
-        prize: "",
-      });
-    }
+    setFormData(() => ({
+      name: data?.name ?? "",
+      department: data?.department ?? departmentData[0]?.name ?? "",
+      team: data?.team ?? teamData[0]?.name ?? "",
+      item: data?.item ?? itemsData[0]?.name ?? "",
+      prize: data?.prize ?? prizeData[0]?.name ?? "",
+    }));
   }, [data]);
 
   const handleInputChange = (
@@ -82,12 +65,24 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  function handleSave() {
+
+  const handleSelectChange = (
+    property: keyof FormData,
+    selectedItem: { name: string }
+  ) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [property]: selectedItem?.name ?? "",
+    }));
+  };
+
+  const handleSave = () => {
     onSave(formData, setFormData);
-  }
-  function closeModal() {
+  };
+
+  const closeModal = () => {
     onClose(false);
-  }
+  };
 
   return (
     <Transition appear show={onOpen} as={Fragment}>
@@ -137,8 +132,10 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
                         classInput="input_form"
                       />
                       <ComboBox
-                        value={team}
-                        onChange={setTeam}
+                        value={{ name: formData.team }}
+                        onChange={(selectedItem) =>
+                          handleSelectChange("team", selectedItem)
+                        }
                         data={teamData}
                         label="Select Team"
                         zIndex={5}
@@ -147,8 +144,10 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
                         isloading={false}
                       />
                       <ComboBox
-                        value={department}
-                        onChange={setDepartment}
+                        value={{ name: formData.department }}
+                        onChange={(selectedItem) =>
+                          handleSelectChange("department", selectedItem)
+                        }
                         data={departmentData}
                         label="Select Department"
                         zIndex={5}
@@ -156,9 +155,12 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
                         classInput={styleCreateEditItem.classInput}
                         isloading={false}
                       />
+
                       <ComboBox
-                        value={item}
-                        onChange={setItem}
+                        value={{ name: formData.item }}
+                        onChange={(selectedItem) =>
+                          handleSelectChange("item", selectedItem)
+                        }
                         data={itemsData}
                         label="Select Item"
                         zIndex={5}
@@ -166,9 +168,12 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
                         classInput={styleCreateEditItem.classInput}
                         isloading={false}
                       />
+
                       <ComboBox
-                        value={rank}
-                        onChange={setRank}
+                        value={{ name: formData.prize }}
+                        onChange={(selectedItem) =>
+                          handleSelectChange("prize", selectedItem)
+                        }
                         data={prizeData}
                         label="Select Rank"
                         zIndex={5}
