@@ -1,6 +1,6 @@
 import { Combobox, Transition } from "@headlessui/react";
+import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { Dispatch, FC, Fragment, SetStateAction, useState } from "react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { WaitingLoader } from ".";
 
 interface ComboBoxProps {
@@ -88,7 +88,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                     }
                     value={data}
                   >
-                    {({ selected, active }) => (
+                    {({ selected }) => (
                       <>
                         <span
                           className={`block truncate ${
@@ -97,15 +97,6 @@ const ComboBox: FC<ComboBoxProps> = ({
                         >
                           {data.name}
                         </span>
-                        {selected ? (
-                          <span
-                            className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                              active ? "text-white" : "text-blue-400"
-                            }`}
-                          >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        ) : null}
                       </>
                     )}
                   </Combobox.Option>

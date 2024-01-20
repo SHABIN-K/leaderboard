@@ -5,28 +5,30 @@ import { SearchInput, Table } from "../components";
 import { CreateEditItem } from "../components/modal";
 import ProtectedDashboard from "../layout/ProtectedDashboard";
 
-import { signOut } from "firebase/auth";
-import { useEffect, useState } from "react";
-import { NavigateFunction, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { signOut } from "firebase/auth";
 import { IoMdAdd } from "react-icons/io";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const styleDashboard = {
   addbtn:
     "py-3 px-4 inline-flex items-center text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none",
 };
 
-const Header: React.FC<{ navigate: NavigateFunction }> = ({ navigate }) => {
+const Header: React.FC = () => {
+  const navigate = useNavigate();
+
   const handleSignOut = () => {
-    try {
-      signOut(auth).then(() => {
+    signOut(auth)
+      .then(() => {
         toast("You have been successfully logged out. See you next time!");
         navigate("/");
+      })
+      .catch((error) => {
+        console.error(error);
+        toast("Oops! Something went wrong!");
       });
-    } catch (error) {
-      console.error(error);
-      toast("oops! something went wrong!");
-    }
   };
 
   return (
@@ -49,8 +51,6 @@ const Header: React.FC<{ navigate: NavigateFunction }> = ({ navigate }) => {
 };
 
 const DashBoard = () => {
-  const navigate = useNavigate();
-
   const [tableData, setTableData] = useState<TableDataType[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchedData, setSearchedData] = useState<
@@ -64,14 +64,15 @@ const DashBoard = () => {
     setTableData(data.data);
   }, []);
 
-  const onCreate = () => {
+  const onCreate = (newItem: unknown) => {
+    console.log(newItem);
     console.log("hello create");
     setIsLoading(false);
   };
 
   return (
     <ProtectedDashboard>
-      <Header navigate={navigate} />
+      <Header />
       <div className="ml-5 mt-5 space-x-2">
         <button className={styleDashboard.addbtn}>
           <IoMdAdd className="w-4 h-4" />

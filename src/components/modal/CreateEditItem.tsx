@@ -8,10 +8,7 @@ import { departmentData, itemsData, prizeData, teamData } from ".";
 interface CreateEditItemProps {
   onOpen: boolean;
   onClose: (value: boolean) => void;
-  onSave: (
-    formData: FormData,
-    setFormData: React.Dispatch<React.SetStateAction<FormData>>
-  ) => void;
+  onSave: (formData: FormData) => void;
   isLoading: boolean;
   title: string;
   btnLabel: string;
@@ -77,7 +74,7 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
   };
 
   const handleSave = () => {
-    onSave(formData, setFormData);
+    onSave(formData);
   };
 
   const closeModal = () => {
