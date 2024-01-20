@@ -2,7 +2,8 @@
 
 import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { FaXmark } from "react-icons/fa6";
+
+import { styleForm } from "../../styles";
 import { FormButtons, FormInput } from "../ui";
 
 interface CreateEditItemProps {
@@ -35,7 +36,6 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
   btnLabel,
   data,
 }) => {
-  
   const [formData, setFormData] = useState<FormData>({
     name: "",
     department: "",
@@ -105,10 +105,6 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-sm transform rounded-2xl bg-white py-2 transition-all cursor-default pointer-events-auto mx-auto relative shadow-xl">
-                <div className="absolute top-2 right-2 rtl:right-auto rtl:left-2 ">
-                  <FaXmark className="icon" onClick={closeModal} />
-                </div>
-
                 <div className="p-2 md:mx-3">
                   <div className="p-2 text-start text-color">
                     <Dialog.Title
@@ -121,12 +117,12 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
                   <div className="p-1">
                     <div className="flex flex-col space-y-1">
                       <FormInput
-                        mainClass="dsdfs"
-                        label="Name"
+                        mainClass="relative"
+                        label="Student name"
                         type="text"
                         name="name"
                         value={formData.name}
-                        placeholder="Enter your shop name"
+                        placeholder="Enter student name"
                         onChange={handleInputChange}
                         classLabel="label_form"
                         classInput="input_form"

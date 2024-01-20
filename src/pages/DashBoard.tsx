@@ -3,10 +3,11 @@ import data from "../utils/data.json";
 import { TableDataType } from "../types";
 import { SearchInput, Table } from "../components";
 import { CreateEditItem } from "../components/modal";
+import ProtectedDashboard from "../layout/ProtectedDashboard";
 
+import { signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
-import { onAuthStateChanged, signOut } from "firebase/auth";
 import { toast } from "sonner";
 import { IoMdAdd } from "react-icons/io";
 
@@ -60,19 +61,8 @@ const DashBoard = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-      if (authUser) {
-        setTableData(data.data);
-      } else {
-        // User is not authenticated, redirect to login page
-        navigate("/login");
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [navigate]);
+    setTableData(data.data);
+  }, []);
 
   const onCreate = () => {
     console.log("hello create");
@@ -80,7 +70,7 @@ const DashBoard = () => {
   };
 
   return (
-    <div>
+    <ProtectedDashboard>
       <Header navigate={navigate} />
       <div className="ml-5 mt-5 space-x-2">
         <button className={styleDashboard.addbtn}>
@@ -113,7 +103,7 @@ const DashBoard = () => {
           btnLabel="Add"
         />
       )}
-    </div>
+    </ProtectedDashboard>
   );
 };
 
