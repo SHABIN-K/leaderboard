@@ -3,14 +3,21 @@ import { SearchInput, Table } from "../components";
 import { FormDataProps, TableDataType } from "../types";
 import { auth, db, fireConfig } from "../firebase/firebase";
 import ProtectedDashboard from "../layout/ProtectedDashboard";
-import { CreateEditItem, teamData } from "../components/modal";
+import { CreateEditItem, prizeData, teamData } from "../components/modal";
 
+import {
+  addDoc,
+  collection,
+  doc,
+  increment,
+  Timestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { toast } from "sonner";
 import { signOut } from "firebase/auth";
 import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { addDoc, collection, doc, Timestamp } from "firebase/firestore";
 
 const styleDashboard = {
   addbtn:
@@ -68,30 +75,38 @@ const DashBoard = () => {
   const onCreate = async (newItem: FormDataProps) => {
     setIsLoading(true);
 
-    const docData = {
-      data: newItem,
-      date: Timestamp.fromDate(new Date()),
-    };
-
     try {
       if (!newItem.name) {
-        toast("name is required");
+        toast("Name is required");
         return;
       }
+
       // Find the link based on newItem.team in teamData
       const teamLink = teamData.find(
         (team) => team.name === newItem.team
       )?.link;
+      // Find the point based on newItem. in teamData
+      const point = prizeData.find(
+        (prize) => prize.name === newItem.prize
+      )?.point;
 
       const collectionRef = collection(db, fireConfig.collection);
-      const ref = doc(collectionRef, teamLink);
-      const docRef = collection(ref, fireConfig.subCollection);
+      const teamDocRef = doc(collectionRef, teamLink);
+      const subCollectionRef = collection(teamDocRef, fireConfig.subCollection);
 
-      await addDoc(docRef, docData).then(() => {
-        toast("created successfully");
+      await addDoc(subCollectionRef, {
+        data: newItem,
+        date: Timestamp.fromDate(new Date()),
+      }).then(async () => {
+        await updateDoc(teamDocRef, {
+          total_points: increment(point ?? 0),
+        }).then(() => {
+          toast("Created successfully");
+        });
       });
-    } catch (e) {
-      console.error("Error adding document: ", e);
+    } catch (error) {
+      console.error("Error creating document: ", error);
+      toast("Error creating document");
     } finally {
       setIsLoading(false);
       setIsAddOpen(false);

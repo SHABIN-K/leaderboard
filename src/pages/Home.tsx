@@ -4,6 +4,7 @@ import data from "../utils/data.json";
 import { fetchTeam } from "../firebase";
 import { Loader } from "../components/ui";
 import { TableDataType, TeamProps } from "../types";
+import { useLoaderStore } from "../utils/state/useLoad";
 import { SearchInput, Table, TopCard } from "../components";
 import { generateConfetti } from "../utils/generateConfetti";
 
@@ -46,7 +47,7 @@ const HeroSection: React.FC<{ team: TeamProps[] }> = ({ team }) => {
 };
 
 const Home: React.FC<AppProps> = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, setIsLoading } = useLoaderStore();
 
   const [team, setTeam] = useState<TeamProps[]>([]);
   const [tableData, setTableData] = useState<TableDataType[]>([]);
@@ -74,7 +75,7 @@ const Home: React.FC<AppProps> = () => {
     };
 
     fetchData();
-  }, [team, setTeam, setTableData]);
+  }, [team, setTeam, setTableData, setIsLoading]);
 
   return (
     <>

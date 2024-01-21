@@ -1,8 +1,13 @@
 import { create } from "zustand";
 
-const useLoaderStore = create((set) => ({
+interface LoaderState {
+  isLoading: boolean;
+  setIsLoading: (newIsLoading: boolean) => void;
+}
+
+const useLoaderStore = create<LoaderState>((set) => ({
   isLoading: false,
-  setIsLoading: (newIsLoading: boolean) => set({ isLoading: newIsLoading }),
+  setIsLoading: (newIsLoading) => set({ isLoading: newIsLoading }),
 }));
 
 export { useLoaderStore };
