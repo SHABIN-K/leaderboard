@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
 
 import data from "../utils/data.json";
-import { TableDataType } from "../types";
-import { db, fireConfig } from "../firebase/firebase";
+import { TableDataType, TeamProps } from "../types";
 import { SearchInput, Table, TopCard } from "../components";
 import { generateConfetti } from "../utils/generateConfetti";
+import { fetchTeam } from "../firebase";
 
 interface AppProps {}
-interface TeamProps {
-  name: string;
-  logo: string;
-  link: string;
-  total_points: number;
-}
 
 const styleApp = {
   font: "font-medium text-lightblack font-codefont tracking-wide",
@@ -37,27 +30,7 @@ const Header: React.FC = () => (
   </div>
 );
 
-const HeroSection: React.FC = () => {
-  const [team, setTeam] = useState<TeamProps[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await getDocs(
-          collection(db, fireConfig.collection)
-        );
-        const teamsData = querySnapshot.docs.map(
-          (doc) => doc.data() as TeamProps
-        );
-        setTeam(teamsData);
-      } catch (error) {
-        console.error("Error fetching documents:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+const HeroSection: React.FC<{ team: TeamProps[] }> = ({ team }) => {
   const sortedTeamCard = [...team].sort(
     (a, b) => b.total_points - a.total_points
   );
@@ -72,6 +45,7 @@ const HeroSection: React.FC = () => {
 };
 
 const Home: React.FC<AppProps> = () => {
+  const [team, setTeam] = useState<TeamProps[]>([]);
   const [tableData, setTableData] = useState<TableDataType[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchedData, setSearchedData] = useState<
@@ -79,16 +53,25 @@ const Home: React.FC<AppProps> = () => {
   >();
 
   useEffect(() => {
-    generateConfetti();
-    setTableData(data.data);
-  }, []);
+    const fetchData = async () => {
+      if (team.length === 0) {
+        // Assuming fetchTeam returns a Promise
+        await fetchTeam(setTeam);
+      } else {
+        generateConfetti();
+        setTableData(data.data);
+      }
+    };
+
+    fetchData();
+  }, [team, setTeam, setTableData]);
 
   return (
     <>
       <section className="relative mx-auto mt-24 mb-12">
         <div className="px-5 lg:px-0">
           <Header />
-          <HeroSection />
+          <HeroSection team={team} />
           <SearchInput
             value={searchText}
             setSearchText={setSearchText}

@@ -15,3 +15,15 @@ export interface FormDataProps {
   item: string;
   prize: string;
 }
+
+export interface TeamProps {
+  name: string;
+  logo: string;
+  link: string;
+  total_points: number;
+}
+
+export interface LoaderProps {
+  isLoading: boolean;
+  setIsLoading: boolean;
+}
