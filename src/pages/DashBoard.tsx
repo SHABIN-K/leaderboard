@@ -1,17 +1,16 @@
-
 import data from "../utils/data.json";
-import { TableDataType } from "../types";
-import { auth } from "../firebase/firebase";
 import { SearchInput, Table } from "../components";
 import { CreateEditItem } from "../components/modal";
+import { FormDataProps, TableDataType } from "../types";
+import { auth, db, fireConfig } from "../firebase/firebase";
 import ProtectedDashboard from "../layout/ProtectedDashboard";
 
 import { toast } from "sonner";
 import { signOut } from "firebase/auth";
 import { IoMdAdd } from "react-icons/io";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import React, { useEffect, useState } from "react";
+import { addDoc, collection, doc, Timestamp } from "firebase/firestore";
 
 const styleDashboard = {
   addbtn:
@@ -65,11 +64,57 @@ const DashBoard = () => {
   useEffect(() => {
     setTableData(data.data);
   }, []);
+  /*
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await getDocs(
+          collection(
+            db,
+            fireConfig.collection,
+            "Py21GuANRfxKACze3meO",
+            "teamname"
+          )
+        );
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data());
+        });
+      } catch (error) {
+        console.error("Error fetching document:", error);
+      }
+    };
 
-  const onCreate = (newItem: unknown) => {
-    console.log(newItem);
-    console.log("hello create");
-    setIsLoading(false);
+    fetchData(); // Invoke the asynchronous function immediately
+  }, []);
+*/
+  const onCreate = async (newItem: FormDataProps) => {
+    setIsLoading(true);
+
+    const docData = {
+      student: newItem,
+      date: Timestamp.fromDate(new Date()),
+    };
+
+    try {
+      if (!newItem.name) {
+        toast("name is required");
+        setIsLoading(false);
+        return;
+      }
+
+      const ref = doc(db, fireConfig.collection, newItem.team);
+      const docRef = collection(ref, fireConfig.subCollection);
+
+      await addDoc(docRef, docData).then(() => {
+        toast("created successfully");
+      });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    } finally {
+      setIsLoading(false);
+      setIsAddOpen(false);
+    }
   };
 
   return (

@@ -12,6 +12,7 @@ interface FormButtonProps {
   secondaryLabel: string;
   onPrimaryClick: () => void;
   onSecondaryClick: () => void;
+  isLoading: boolean;
 }
 
 const FormButtons: React.FC<FormButtonProps> = ({
@@ -24,6 +25,7 @@ const FormButtons: React.FC<FormButtonProps> = ({
   secondaryLabel,
   onPrimaryClick,
   onSecondaryClick,
+  isLoading,
 }) => {
   const primaryButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -45,6 +47,7 @@ const FormButtons: React.FC<FormButtonProps> = ({
     <div className={mainClass}>
       <button
         type="button"
+        disabled={isLoading}
         className={secondaryClass}
         onClick={onSecondaryClick}
       >

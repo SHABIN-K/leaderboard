@@ -23,7 +23,8 @@ const db = getFirestore(app);
 
 // Firebase  configuration
 const fireConfig = {
-  collection: "student",
+  collection: "team",
+  subCollection: "student",
 };
 
 export { db, auth, fireConfig };

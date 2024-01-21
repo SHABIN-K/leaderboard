@@ -4,10 +4,10 @@ import CreateEditTeam from "./CreateEditTeam";
 export { CreateEditItem, CreateEditTeam };
 
 export const teamData = [
-  { name: "പഞ്ചവാദ്യം" },
-  { name: "പടയണി" },
-  { name: "തെയ്യം" },
-  { name: "കുമ്മാട്ടി" },
+  { name: "പഞ്ചവാദ്യം", link: "panchavadyam" },
+  { name: "പടയണി", link: "padayani" },
+  { name: "തെയ്യം", link: "teyam" },
+  { name: "കുമ്മാട്ടി", link: "kummati" },
 ];
 
 export const departmentData = [

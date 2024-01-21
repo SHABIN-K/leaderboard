@@ -2,25 +2,18 @@ import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useEffect, useState } from "react";
 
 import ComboBox from "../ui/ComboBox";
+import { FormDataProps } from "../../types";
 import { FormButtons, FormInput } from "../ui";
 import { departmentData, itemsData, prizeData, teamData } from ".";
 
 interface CreateEditItemProps {
   onOpen: boolean;
   onClose: (value: boolean) => void;
-  onSave: (formData: FormData) => void;
+  onSave: (formData: FormDataProps) => void;
   isLoading: boolean;
   title: string;
   btnLabel: string;
-  data?: FormData;
-}
-
-interface FormData {
-  name: string;
-  department: string;
-  team: string;
-  item: string;
-  prize: string;
+  data?: FormDataProps;
 }
 
 const styleCreateEditItem = {
@@ -38,7 +31,7 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
   btnLabel,
   data,
 }) => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<FormDataProps>({
     name: "",
     department: departmentData[0]?.name ?? "",
     team: teamData[0]?.name ?? "",
@@ -64,7 +57,7 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
   };
 
   const handleSelectChange = (
-    property: keyof FormData,
+    property: keyof FormDataProps,
     selectedItem: { name: string }
   ) => {
     setFormData((prevData) => ({
@@ -193,6 +186,7 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
                     secondaryLabel="cancel"
                     onPrimaryClick={handleSave}
                     onSecondaryClick={closeModal}
+                    isLoading={isLoading}
                   />
                 </div>
               </Dialog.Panel>

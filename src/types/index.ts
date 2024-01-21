@@ -7,3 +7,11 @@ export interface TableDataType {
   college: string;
   rank: number;
 }
+
+export interface FormDataProps {
+  name: string;
+  department: string;
+  team: string;
+  item: string;
+  prize: string;
+}
