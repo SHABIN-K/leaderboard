@@ -1,9 +1,9 @@
 import data from "../utils/data.json";
 import { SearchInput, Table } from "../components";
-import { CreateEditItem } from "../components/modal";
 import { FormDataProps, TableDataType } from "../types";
 import { auth, db, fireConfig } from "../firebase/firebase";
 import ProtectedDashboard from "../layout/ProtectedDashboard";
+import { CreateEditItem, teamData } from "../components/modal";
 
 import { toast } from "sonner";
 import { signOut } from "firebase/auth";
@@ -92,18 +92,22 @@ const DashBoard = () => {
     setIsLoading(true);
 
     const docData = {
-      student: newItem,
+      data: newItem,
       date: Timestamp.fromDate(new Date()),
     };
 
     try {
       if (!newItem.name) {
         toast("name is required");
-        setIsLoading(false);
         return;
       }
+      // Find the link based on newItem.team in teamData
+      const teamLink = teamData.find(
+        (team) => team.name === newItem.team
+      )?.link;
 
-      const ref = doc(db, fireConfig.collection, newItem.team);
+      const collectionRef = collection(db, fireConfig.collection);
+      const ref = doc(collectionRef, teamLink);
       const docRef = collection(ref, fireConfig.subCollection);
 
       await addDoc(docRef, docData).then(() => {

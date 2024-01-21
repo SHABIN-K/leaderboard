@@ -26,7 +26,7 @@ export const itemsData = [
 ];
 
 export const prizeData = [
-  { name: "First" },
-  { name: "Second" },
-  { name: "Third" },
+  { name: "First", point: 10 },
+  { name: "Second", point: 5 },
+  { name: "Third", point: 1 },
 ];
