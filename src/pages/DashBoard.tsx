@@ -1,6 +1,7 @@
-import { auth } from "../utils";
+
 import data from "../utils/data.json";
 import { TableDataType } from "../types";
+import { auth } from "../firebase/firebase";
 import { SearchInput, Table } from "../components";
 import { CreateEditItem } from "../components/modal";
 import ProtectedDashboard from "../layout/ProtectedDashboard";
@@ -10,6 +11,7 @@ import { signOut } from "firebase/auth";
 import { IoMdAdd } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 
 const styleDashboard = {
   addbtn:

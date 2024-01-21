@@ -1,5 +1,3 @@
-import { auth } from "./firebase";
-
 export const teamCard = [
   {
     name: "പഞ്ചവാദ്യം",
@@ -22,5 +20,3 @@ export const teamCard = [
     total_points: 73,
   },
 ];
-
-export { auth };

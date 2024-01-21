@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import { onAuthStateChanged } from "@firebase/auth";
 import { ReactNode, useEffect, useState } from "react";
 
-import { auth } from "../utils";
+import { auth } from "../firebase/firebase";
 import { Loader } from "../components/ui";
 
 interface ProtectedDashboardProps {

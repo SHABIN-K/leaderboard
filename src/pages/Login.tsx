@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
-import { auth } from "../utils";
+import { auth } from "../firebase/firebase";
 import { FormInput } from "../components/ui";
 
 const styleForm = {
