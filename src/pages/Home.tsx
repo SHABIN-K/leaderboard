@@ -14,7 +14,7 @@ const styleApp = {
   font: "font-medium text-lightblack font-codefont tracking-wide",
 };
 
-const Header: React.FC = () => (
+const Header: React.FC<{ date: FormDataProps[] }> = ({ date }) => (
   <div className="relative my-10 mx-auto flex-center flex-col text-center lg:mx-8 sm:mx-2">
     <h2 className="my-1.5 pt-0 px-2 pb-2 font-['sadhise'] text-[5rem] font-bold text-lightblack tracking-[4px] rounded-lg md:text-[3rem]">
       Kalaavathara 2k24
@@ -23,7 +23,7 @@ const Header: React.FC = () => (
     <p className={`my-2 text-lg ${styleApp.font}`}>
       Last updated on:
       <span className="mx-0.5 font-curlfont font-bold text-primarydark italic">
-        {new Date(data.lastUpdated).toLocaleString("en-US", {
+        {new Date(date.date).toLocaleString("en-US", {
           dateStyle: "full",
           timeStyle: "short",
         })}
@@ -78,7 +78,7 @@ const Home: React.FC<AppProps> = () => {
 
     fetchData();
   }, [team, setTeam, setTableData, setIsLoading]);
-console.log(tableDataa);
+  console.log(tableDataa);
 
   return (
     <>
@@ -87,7 +87,7 @@ console.log(tableDataa);
       ) : (
         <section className="relative mx-auto mt-24 mb-12">
           <div className="px-5 lg:px-0">
-            <Header />
+            <Header date={tableDataa} />
             <HeroSection team={team} />
             <SearchInput
               value={searchText}
@@ -95,7 +95,11 @@ console.log(tableDataa);
               setSearchedData={setSearchedData}
             />
             <Table
-              data={searchText ? (searchedData as unknown as TableDataType[]) : tableData}
+              data={
+                searchText
+                  ? (searchedData as unknown as TableDataType[])
+                  : tableData
+              }
             />
           </div>
         </section>

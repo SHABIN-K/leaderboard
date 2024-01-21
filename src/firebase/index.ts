@@ -26,10 +26,6 @@ const fetchStudent = async (
       collection(db, fireConfig.collection)
     );
 
-    const mainCollectionData = mainCollectionSnapshot.docs.map(
-      (doc) => doc.data() as FormDataProps
-    );
-
     // Fetch data from subcollections
     const subcollectionDataPromises = mainCollectionSnapshot.docs.map(
       async (doc) => {
@@ -46,11 +42,11 @@ const fetchStudent = async (
     const subcollectionData = await Promise.all(subcollectionDataPromises);
 
     // Combine main collection and subcollection data
-    const allData = mainCollectionData.concat(
-      ...subcollectionData.flat()
-    ) as FormDataProps[];
-
-    setTableDataa(allData);
+    const allSubcollectionData = subcollectionData.flat() as FormDataProps[];
+    const sortedData = allSubcollectionData.sort((a, b) =>
+      a.date > b.date ? -1 : 1
+    );
+    setTableDataa(sortedData);
   } catch (error) {
     console.error("Error fetching documents:", error);
   }

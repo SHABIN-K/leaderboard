@@ -9,6 +9,7 @@ export interface TableDataType {
 }
 
 export interface FormDataProps {
+  date: Date;
   name: string;
   department: string;
   team: string;
