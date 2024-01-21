@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import data from "../utils/data.json";
+import { fetchTeam } from "../firebase";
+import { Loader } from "../components/ui";
 import { TableDataType, TeamProps } from "../types";
 import { SearchInput, Table, TopCard } from "../components";
 import { generateConfetti } from "../utils/generateConfetti";
-import { fetchTeam } from "../firebase";
 
 interface AppProps {}
 
@@ -45,6 +46,8 @@ const HeroSection: React.FC<{ team: TeamProps[] }> = ({ team }) => {
 };
 
 const Home: React.FC<AppProps> = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [team, setTeam] = useState<TeamProps[]>([]);
   const [tableData, setTableData] = useState<TableDataType[]>([]);
   const [searchText, setSearchText] = useState<string>("");
@@ -54,12 +57,19 @@ const Home: React.FC<AppProps> = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (team.length === 0) {
-        // Assuming fetchTeam returns a Promise
-        await fetchTeam(setTeam);
-      } else {
-        generateConfetti();
-        setTableData(data.data);
+      setIsLoading(true);
+
+      try {
+        if (team.length === 0) {
+          await fetchTeam(setTeam);
+        } else {
+          generateConfetti();
+          setTableData(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -68,20 +78,24 @@ const Home: React.FC<AppProps> = () => {
 
   return (
     <>
-      <section className="relative mx-auto mt-24 mb-12">
-        <div className="px-5 lg:px-0">
-          <Header />
-          <HeroSection team={team} />
-          <SearchInput
-            value={searchText}
-            setSearchText={setSearchText}
-            setSearchedData={setSearchedData}
-          />
-          <Table
-            data={searchText ? (searchedData as TableDataType[]) : tableData}
-          />
-        </div>
-      </section>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <section className="relative mx-auto mt-24 mb-12">
+          <div className="px-5 lg:px-0">
+            <Header />
+            <HeroSection team={team} />
+            <SearchInput
+              value={searchText}
+              setSearchText={setSearchText}
+              setSearchedData={setSearchedData}
+            />
+            <Table
+              data={searchText ? (searchedData as TableDataType[]) : tableData}
+            />
+          </div>
+        </section>
+      )}
     </>
   );
 };
