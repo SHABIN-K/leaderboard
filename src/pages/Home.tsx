@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 import data from "../utils/data.json";
-import { fetchTeam } from "../firebase";
 import { Loader } from "../components/ui";
-import { TableDataType, TeamProps } from "../types";
+import { FormDataProps, TableDataType, TeamProps } from "../types";
+import { fetchStudent, fetchTeam } from "../firebase";
 import { useLoaderStore } from "../utils/state/useLoad";
 import { SearchInput, Table, TopCard } from "../components";
 import { generateConfetti } from "../utils/generateConfetti";
@@ -50,10 +50,11 @@ const Home: React.FC<AppProps> = () => {
   const { isLoading, setIsLoading } = useLoaderStore();
 
   const [team, setTeam] = useState<TeamProps[]>([]);
+  const [tableDataa, setTableDataa] = useState<FormDataProps[]>([]);
   const [tableData, setTableData] = useState<TableDataType[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchedData, setSearchedData] = useState<
-    TableDataType[] | undefined
+    FormDataProps[] | undefined
   >();
 
   useEffect(() => {
@@ -63,6 +64,7 @@ const Home: React.FC<AppProps> = () => {
       try {
         if (team.length === 0) {
           await fetchTeam(setTeam);
+          await fetchStudent(setTableDataa);
         } else {
           generateConfetti();
           setTableData(data.data);
@@ -76,6 +78,7 @@ const Home: React.FC<AppProps> = () => {
 
     fetchData();
   }, [team, setTeam, setTableData, setIsLoading]);
+console.log(tableDataa);
 
   return (
     <>
@@ -92,7 +95,7 @@ const Home: React.FC<AppProps> = () => {
               setSearchedData={setSearchedData}
             />
             <Table
-              data={searchText ? (searchedData as TableDataType[]) : tableData}
+              data={searchText ? (searchedData as unknown as TableDataType[]) : tableData}
             />
           </div>
         </section>

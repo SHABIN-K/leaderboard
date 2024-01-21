@@ -2,13 +2,13 @@ import Fuse from "fuse.js";
 import React, { ChangeEvent } from "react";
 
 import data from "../utils/data.json";
-import { TableDataType } from "../types";
+import { FormDataProps } from "../types";
 
 interface SearchInputProps {
   value?: string;
   setSearchText: React.Dispatch<React.SetStateAction<string>>;
   setSearchedData: React.Dispatch<
-    React.SetStateAction<TableDataType[] | undefined>
+    React.SetStateAction<FormDataProps[] | undefined>
   >;
 }
 
@@ -21,7 +21,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     setSearchText(e.target.value);
-    const fuse = new Fuse(data.data as TableDataType[], {
+    const fuse = new Fuse(data.data as FormDataProps[], {
       keys: ["user_name", "full_name", "college"],
       threshold: 0.2,
     });

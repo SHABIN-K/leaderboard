@@ -1,8 +1,14 @@
 import { create } from "zustand";
+import { FormDataProps } from "../../types";
 
-const useStudentStore = create((set) => ({
+interface TeamStudentState {
+  student: FormDataProps[];
+  setStudent: (data: FormDataProps[]) => void;
+}
+
+const useTeamStore = create<TeamStudentState>((set) => ({
   student: [],
-  setStudent: (data: unknown) => set({ student: data }),
+  setStudent: (data) => set({ student: data }),
 }));
 
-export { useStudentStore };
+export { useTeamStore };

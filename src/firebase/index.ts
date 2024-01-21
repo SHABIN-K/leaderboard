@@ -1,7 +1,7 @@
 import { SetStateAction } from "react";
 import { collection, getDocs } from "firebase/firestore";
 
-import { TeamProps } from "../types";
+import { FormDataProps, TeamProps } from "../types";
 import { db, fireConfig } from "../firebase/firebase";
 
 const fetchTeam = async (setTeam: {
@@ -17,4 +17,43 @@ const fetchTeam = async (setTeam: {
   }
 };
 
-export { fetchTeam };
+const fetchStudent = async (
+  setTableDataa: (value: SetStateAction<FormDataProps[]>) => void
+) => {
+  try {
+    // Fetch data from the main collection
+    const mainCollectionSnapshot = await getDocs(
+      collection(db, fireConfig.collection)
+    );
+
+    const mainCollectionData = mainCollectionSnapshot.docs.map(
+      (doc) => doc.data() as FormDataProps
+    );
+
+    // Fetch data from subcollections
+    const subcollectionDataPromises = mainCollectionSnapshot.docs.map(
+      async (doc) => {
+        const subCollectionSnapshot = await getDocs(
+          collection(doc.ref, fireConfig.subCollection)
+        );
+
+        return subCollectionSnapshot.docs.map(
+          (subDoc) => subDoc.data() as FormDataProps
+        );
+      }
+    );
+
+    const subcollectionData = await Promise.all(subcollectionDataPromises);
+
+    // Combine main collection and subcollection data
+    const allData = mainCollectionData.concat(
+      ...subcollectionData.flat()
+    ) as FormDataProps[];
+
+    setTableDataa(allData);
+  } catch (error) {
+    console.error("Error fetching documents:", error);
+  }
+};
+
+export { fetchTeam, fetchStudent };
