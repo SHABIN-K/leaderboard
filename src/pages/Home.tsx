@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
 
-import { teamCard } from "../utils";
 import data from "../utils/data.json";
 import { TableDataType } from "../types";
+import { db, fireConfig } from "../firebase/firebase";
 import { SearchInput, Table, TopCard } from "../components";
 import { generateConfetti } from "../utils/generateConfetti";
 
 interface AppProps {}
+interface TeamProps {
+  name: string;
+  logo: string;
+  link: string;
+  total_points: number;
+}
 
 const styleApp = {
   font: "font-medium text-lightblack font-codefont tracking-wide",
@@ -31,7 +38,27 @@ const Header: React.FC = () => (
 );
 
 const HeroSection: React.FC = () => {
-  const sortedTeamCard = [...teamCard].sort(
+  const [team, setTeam] = useState<TeamProps[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await getDocs(
+          collection(db, fireConfig.collection)
+        );
+        const teamsData = querySnapshot.docs.map(
+          (doc) => doc.data() as TeamProps
+        );
+        setTeam(teamsData);
+      } catch (error) {
+        console.error("Error fetching documents:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const sortedTeamCard = [...team].sort(
     (a, b) => b.total_points - a.total_points
   );
 

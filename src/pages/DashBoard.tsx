@@ -36,7 +36,7 @@ const Header: React.FC = () => {
     <nav className="border-gray-200 px-4 lg:px-6 py-2.5 bg-gray-800">
       <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
         <div className="flex items-center self-center text-xl font-semibold whitespace-nowrap text-white">
-          leaderboard
+          Dashboard
         </div>
         <div className="flex items-center lg:order-2">
           <div
@@ -64,30 +64,7 @@ const DashBoard = () => {
   useEffect(() => {
     setTableData(data.data);
   }, []);
-  /*
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await getDocs(
-          collection(
-            db,
-            fireConfig.collection,
-            "Py21GuANRfxKACze3meO",
-            "teamname"
-          )
-        );
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data());
-        });
-      } catch (error) {
-        console.error("Error fetching document:", error);
-      }
-    };
 
-    fetchData(); // Invoke the asynchronous function immediately
-  }, []);
-*/
   const onCreate = async (newItem: FormDataProps) => {
     setIsLoading(true);
 
