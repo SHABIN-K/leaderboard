@@ -2,7 +2,7 @@ import { TbHttpDelete } from "react-icons/tb";
 import { useLocation } from "react-router-dom";
 
 import { teamCard } from "../utils";
-import { TableDataType } from "../types";
+import { FormDataProps } from "../types";
 
 const TableHeader = ({ pathname }: { pathname: string }) => {
   const styleTableHeader = {
@@ -30,13 +30,7 @@ const TableHeader = ({ pathname }: { pathname: string }) => {
         <th className={`${styleTableHeader.lgTextSm} ${styleTableHeader.cell}`}>
           prize
         </th>
-        {pathname !== "/dashboard" ? (
-          <th
-            className={`${styleTableHeader.lgTextSm} ${styleTableHeader.xsHidden} ${styleTableHeader.cell}`}
-          >
-            Certificate
-          </th>
-        ) : (
+        {pathname === "/dashboard" && (
           <th
             className={`${styleTableHeader.lgTextSm} ${styleTableHeader.xsHidden} ${styleTableHeader.cell}`}
           >
@@ -53,10 +47,11 @@ const UserCard = ({
   index,
   pathname,
 }: {
-  data: TableDataType;
+  data: FormDataProps;
   index: number;
   pathname: string;
 }) => {
+ 
   return (
     <tr>
       <td className="p-5 border-b border-gray-200 bg-darkwhite lg:hidden">
@@ -95,13 +90,7 @@ const UserCard = ({
           #{["first", "second", "third"][Math.floor(Math.random() * 3)]}
         </p>
       </td>
-      {pathname !== "/dashboard" ? (
-        <td className="p-5 border-b text-right border-gray-200 bg-darkwhite">
-          <p className="py-1 px-3 cursor-pointer font-curlfont text-base font-bold text-lightblack w-fit hover:text-darkwhite hover:bg-primarylight transition rounded-lg text-center">
-            view
-          </p>
-        </td>
-      ) : (
+      {pathname === "/dashboard" && (
         <td className="p-5 border-b text-right border-gray-200 bg-darkwhite">
           <p className="py-1 px-3 cursor-pointer font-curlfont text-base font-extrabold text-lightblack w-fit hover:text-darkwhite hover:bg-primarylight transition rounded-lg text-center">
             Edit
@@ -115,7 +104,7 @@ const UserCard = ({
   );
 };
 
-const Table = ({ data }: { data: TableDataType[] }) => {
+const Table = ({ data }: { data: FormDataProps[] }) => {
   const { pathname } = useLocation();
 
   return (

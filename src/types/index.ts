@@ -8,8 +8,15 @@ export interface TableDataType {
   rank: number;
 }
 
+export interface DatabaseData {
+  data: FormDataProps;
+  date: {
+    seconds: number;
+    nanoseconds: number;
+  };
+}
+
 export interface FormDataProps {
-  date: Date;
   name: string;
   department: string;
   team: string;

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import data from "../utils/data.json";
 import { Loader } from "../components/ui";
-import { FormDataProps, TableDataType, TeamProps } from "../types";
+import { FormDataProps, TeamProps } from "../types";
 import { fetchStudent, fetchTeam } from "../firebase";
 import { useLoaderStore } from "../utils/state/useLoad";
 import { SearchInput, Table, TopCard } from "../components";
@@ -23,7 +22,7 @@ const Header: React.FC<{ date: FormDataProps[] }> = ({ date }) => (
     <p className={`my-2 text-lg ${styleApp.font}`}>
       Last updated on:
       <span className="mx-0.5 font-curlfont font-bold text-primarydark italic">
-        {new Date(date.date).toLocaleString("en-US", {
+        {new Date(date).toLocaleString("en-US", {
           dateStyle: "full",
           timeStyle: "short",
         })}
@@ -50,8 +49,7 @@ const Home: React.FC<AppProps> = () => {
   const { isLoading, setIsLoading } = useLoaderStore();
 
   const [team, setTeam] = useState<TeamProps[]>([]);
-  const [tableDataa, setTableDataa] = useState<FormDataProps[]>([]);
-  const [tableData, setTableData] = useState<TableDataType[]>([]);
+  const [tableData, setTableData] = useState<FormDataProps[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchedData, setSearchedData] = useState<
     FormDataProps[] | undefined
@@ -64,10 +62,9 @@ const Home: React.FC<AppProps> = () => {
       try {
         if (team.length === 0) {
           await fetchTeam(setTeam);
-          await fetchStudent(setTableDataa);
+          await fetchStudent(setTableData);
         } else {
           generateConfetti();
-          setTableData(data.data);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -78,8 +75,8 @@ const Home: React.FC<AppProps> = () => {
 
     fetchData();
   }, [team, setTeam, setTableData, setIsLoading]);
-  console.log(tableDataa);
 
+  const lastUpdatedDate = new Date(tableData[0].date.seconds * 1000);
   return (
     <>
       {isLoading ? (
@@ -87,7 +84,7 @@ const Home: React.FC<AppProps> = () => {
       ) : (
         <section className="relative mx-auto mt-24 mb-12">
           <div className="px-5 lg:px-0">
-            <Header date={tableDataa} />
+            <Header date={lastUpdatedDate} />
             <HeroSection team={team} />
             <SearchInput
               value={searchText}
@@ -97,7 +94,7 @@ const Home: React.FC<AppProps> = () => {
             <Table
               data={
                 searchText
-                  ? (searchedData as unknown as TableDataType[])
+                  ? (searchedData as unknown as FormDataProps[])
                   : tableData
               }
             />
