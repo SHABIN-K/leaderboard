@@ -47,7 +47,7 @@ const UserCard = ({
       </div>
     </td>
     <td className={`${styleTable.cell} p-3`}>
-      <p className="font-mainfont text-lg font-medium text-darkgrey text-left">
+      <p className="font-mainfont text-lg font-medium text-darkgrey text-left capitalize">
         <LabelCell label="Department" data={data.data.department} />
       </p>
     </td>
