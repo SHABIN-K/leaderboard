@@ -8,6 +8,11 @@ export interface TableDataType {
   rank: number;
 }
 
+export interface TableDataProps {
+  data: FormDataProps;
+  date: Date;
+}
+
 export interface DatabaseData {
   data: FormDataProps;
   date: {

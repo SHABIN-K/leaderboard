@@ -1,7 +1,7 @@
 import { SetStateAction } from "react";
 import { collection, getDocs } from "firebase/firestore";
 
-import { FormDataProps, TeamProps } from "../types";
+import { DatabaseData, TableDataProps, TeamProps } from "../types";
 import { db, fireConfig } from "../firebase/firebase";
 
 const fetchTeam = async (setTeam: {
@@ -18,34 +18,35 @@ const fetchTeam = async (setTeam: {
 };
 
 const fetchStudent = async (
-  setTableDataa: (value: SetStateAction<FormDataProps[]>) => void
+  setTableDataa: (value: SetStateAction<TableDataProps[]>) => void
 ) => {
   try {
-    // Fetch data from the main collection
     const mainCollectionSnapshot = await getDocs(
       collection(db, fireConfig.collection)
     );
 
-    // Fetch data from subcollections
     const subcollectionDataPromises = mainCollectionSnapshot.docs.map(
       async (doc) => {
         const subCollectionSnapshot = await getDocs(
           collection(doc.ref, fireConfig.subCollection)
         );
 
-        return subCollectionSnapshot.docs.map(
-          (subDoc) => subDoc.data() as FormDataProps
-        );
+        return subCollectionSnapshot.docs.map((subDoc) => {
+          const data = subDoc.data() as DatabaseData;
+          const date = new Date(data.date.seconds * 1000);
+          return { ...data, date } as TableDataProps;
+        });
       }
     );
 
     const subcollectionData = await Promise.all(subcollectionDataPromises);
+    const allSubcollectionData =
+      subcollectionData.flat() as unknown as TableDataProps[];
 
-    // Combine main collection and subcollection data
-    const allSubcollectionData = subcollectionData.flat() as FormDataProps[];
     const sortedData = allSubcollectionData.sort((a, b) =>
       a.date > b.date ? -1 : 1
     );
+
     setTableDataa(sortedData);
   } catch (error) {
     console.error("Error fetching documents:", error);

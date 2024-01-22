@@ -2,7 +2,7 @@ import { TbHttpDelete } from "react-icons/tb";
 import { useLocation } from "react-router-dom";
 
 import { teamCard } from "../utils";
-import { FormDataProps } from "../types";
+import { TableDataProps } from "../types";
 
 const TableHeader = ({ pathname }: { pathname: string }) => {
   const styleTableHeader = {
@@ -47,11 +47,10 @@ const UserCard = ({
   index,
   pathname,
 }: {
-  data: FormDataProps;
+  data: TableDataProps;
   index: number;
   pathname: string;
 }) => {
- 
   return (
     <tr>
       <td className="p-5 border-b border-gray-200 bg-darkwhite lg:hidden">
@@ -104,7 +103,7 @@ const UserCard = ({
   );
 };
 
-const Table = ({ data }: { data: FormDataProps[] }) => {
+const Table = ({ data }: { data: TableDataProps[] }) => {
   const { pathname } = useLocation();
 
   return (
