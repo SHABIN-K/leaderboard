@@ -62,7 +62,7 @@ const DashBoard = () => {
   const [tableData, setTableData] = useState<TableDataProps[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchedData, setSearchedData] = useState<
-    FormDataProps[] | undefined
+  TableDataProps[] | undefined
   >();
 
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -135,6 +135,7 @@ const DashBoard = () => {
         </div>
         <SearchInput
           value={searchText}
+          data={tableData}
           setSearchText={setSearchText}
           setSearchedData={setSearchedData}
         />

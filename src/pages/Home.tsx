@@ -5,7 +5,7 @@ import { useTableStore, useTeamStore } from "../utils/store";
 import { fetchStudent, fetchTeam } from "../firebase";
 import { SearchInput, Table, TopCard } from "../components";
 import { generateConfetti } from "../utils/generateConfetti";
-import { FormDataProps, TableDataProps, TeamProps } from "../types";
+import { TableDataProps, TeamProps } from "../types";
 
 interface AppProps {}
 
@@ -67,7 +67,7 @@ const Home: React.FC<AppProps> = () => {
   const [tableData, setTableData] = useState<TableDataProps[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchedData, setSearchedData] = useState<
-    FormDataProps[] | undefined
+    TableDataProps[] | undefined
   >();
 
   useEffect(() => {
@@ -103,6 +103,7 @@ const Home: React.FC<AppProps> = () => {
             <HeroSection team={team} />
             <SearchInput
               value={searchText}
+              data={tableData}
               setSearchText={setSearchText}
               setSearchedData={setSearchedData}
             />
