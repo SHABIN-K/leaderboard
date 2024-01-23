@@ -35,8 +35,3 @@ export interface TeamProps {
   link: string;
   total_points: number;
 }
-
-export interface LoaderProps {
-  isLoading: boolean;
-  setIsLoading: boolean;
-}

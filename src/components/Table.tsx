@@ -89,7 +89,7 @@ const Table = ({ data }: { data: TableDataProps[] }) => {
               <TableHeaderCell label="No" />
               <TableHeaderCell label="Participant's name" />
               <TableHeaderCell label="Department" />
-              <TableHeaderCell label="Item" />
+              <TableHeaderCell label="Event name" />
               <TableHeaderCell label="Prize" />
               {pathname === "/dashboard" && <TableHeaderCell label="Action" />}
             </tr>

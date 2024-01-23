@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 import { Loader } from "../components/ui";
 import { fetchStudent, fetchTeam } from "../firebase";
-import { useLoaderStore } from "../utils/state/useLoad";
 import { SearchInput, Table, TopCard } from "../components";
 import { generateConfetti } from "../utils/generateConfetti";
 import { FormDataProps, TableDataProps, TeamProps } from "../types";
@@ -59,7 +58,7 @@ const HeroSection: React.FC<{ team: TeamProps[] }> = ({ team }) => {
 };
 
 const Home: React.FC<AppProps> = () => {
-  const { isLoading, setIsLoading } = useLoaderStore();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [team, setTeam] = useState<TeamProps[]>([]);
   const [tableData, setTableData] = useState<TableDataProps[]>([]);
