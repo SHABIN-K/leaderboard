@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import { Loader } from "../components/ui";
-import { FormDataProps, TableDataProps, TeamProps } from "../types";
 import { fetchStudent, fetchTeam } from "../firebase";
 import { useLoaderStore } from "../utils/state/useLoad";
 import { SearchInput, Table, TopCard } from "../components";
 import { generateConfetti } from "../utils/generateConfetti";
+import { FormDataProps, TableDataProps, TeamProps } from "../types";
 
 interface AppProps {}
 
@@ -88,7 +88,6 @@ const Home: React.FC<AppProps> = () => {
 
     fetchData();
   }, [team, setTeam, setTableData, setIsLoading]);
-  console.log(tableData);
 
   return (
     <>

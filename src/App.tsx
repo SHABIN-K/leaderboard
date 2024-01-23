@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import { Loader } from "./components/ui";
 const Login = lazy(() => import("./pages/Login"));
 const DashBoard = lazy(() => import("./pages/DashBoard"));
+const ViewScore = lazy(() => import("./pages/ViewScore"));
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="*" element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="dashboard" element={<DashBoard />} />
+        <Route path="view-score/:id" element={<ViewScore />} />
       </Routes>
     </Suspense>
   );

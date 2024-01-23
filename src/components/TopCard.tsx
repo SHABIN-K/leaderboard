@@ -1,10 +1,12 @@
 import CountUp from "react-countup";
+import { Link } from "react-router-dom";
 
 interface TeamDataType {
   name: string;
   logo: string;
   total_points: number;
   rank: number;
+  link: string;
 }
 
 const TopCard: React.FC<{ teamData: TeamDataType }> = ({ teamData }) => {
@@ -43,9 +45,12 @@ const TopCard: React.FC<{ teamData: TeamDataType }> = ({ teamData }) => {
         <h1 className="my-2 mx-auto text-4xl font-mallufont text-darkblack text-center tracking-[-0.05em]">
           {teamData.name}
         </h1>
-        <button className="m-auto mb-1.5 px-3 py-1 text-lg font-bold font-curlfont text-sky-600 bg-sky-100 hover:bg-sky-200 text-center rounded-full transition">
+        <Link
+          to={`view-score/${teamData.link}`}
+          className="m-auto mb-1.5 px-3 py-1 text-lg font-bold font-curlfont text-sky-600 bg-sky-100 hover:bg-sky-200 text-center rounded-full transition"
+        >
           View Details
-        </button>
+        </Link>
       </div>
     </div>
   );
