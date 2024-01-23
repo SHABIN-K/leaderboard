@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import { Loader } from "../components/ui";
+import { useTableStore, useTeamStore } from "../utils/store";
 import { fetchStudent, fetchTeam } from "../firebase";
 import { SearchInput, Table, TopCard } from "../components";
 import { generateConfetti } from "../utils/generateConfetti";
 import { FormDataProps, TableDataProps, TeamProps } from "../types";
-import { useTableStore } from "../utils/store";
 
 interface AppProps {}
 
@@ -59,7 +59,8 @@ const HeroSection: React.FC<{ team: TeamProps[] }> = ({ team }) => {
 };
 
 const Home: React.FC<AppProps> = () => {
-  const { table, setTable } = useTableStore();
+  const { setTable } = useTableStore();
+  const { setTeam: setTeamData } = useTeamStore();
   const [isLoading, setIsLoading] = useState(false);
 
   const [team, setTeam] = useState<TeamProps[]>([]);
@@ -77,9 +78,9 @@ const Home: React.FC<AppProps> = () => {
         if (team.length === 0) {
           await fetchTeam(setTeam);
           await fetchStudent(setTableData);
-          setTable(tableData);
         } else {
           setTable(tableData);
+          setTeamData(team);
           generateConfetti();
         }
       } catch (error) {
@@ -89,9 +90,7 @@ const Home: React.FC<AppProps> = () => {
       }
     };
     fetchData();
-    setTable(tableData);
-  }, [team, setTeam, setTableData, setIsLoading]);
-console.log(table);
+  }, [setTable, setTeamData, tableData, team]);
 
   return (
     <>

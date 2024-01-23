@@ -1,9 +1,13 @@
 import { create } from "zustand";
-import { TableDataProps } from "../types";
+import { TableDataProps, TeamProps } from "../types";
 
 interface studentState {
   table: TableDataProps[];
   setTable: (data: TableDataProps[]) => void;
+}
+interface TeamState {
+  team: TeamProps[];
+  setTeam: (data: TeamProps[]) => void;
 }
 
 const useTableStore = create<studentState>((set) => ({
@@ -11,4 +15,9 @@ const useTableStore = create<studentState>((set) => ({
   setTable: (data) => set({ table: data }),
 }));
 
-export { useTableStore };
+const useTeamStore = create<TeamState>((set) => ({
+  team: [],
+  setTeam: (data) => set({ team: data }),
+}));
+
+export { useTableStore, useTeamStore };

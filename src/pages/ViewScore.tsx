@@ -1,17 +1,52 @@
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import { Table } from "../components";
-import { useTableStore } from "../utils/store";
+import { useTableStore, useTeamStore } from "../utils/store";
+import { TableDataProps, TeamProps } from "../types";
+import { Loader } from "../components/ui";
 
 const ViewScore = () => {
-  const { id } = useParams();
+  const navigate = useNavigate();
+  const { id: title } = useParams<{ id: string }>();
   const { table } = useTableStore();
-  console.log(id);
-  console.log(table);
+  const { team } = useTeamStore();
+
+  const [selectedTeam, setSelectedTeam] = useState<TeamProps | null>(null);
+  const [selectedItems, setSelectedItems] = useState<TableDataProps[]>([]);
+
+  useEffect(() => {
+    const teamFound = team.find((team) => team.link === title);
+    setSelectedTeam(teamFound || null);
+  }, [title, team]);
+
+  useEffect(() => {
+    // Use selectedTeam.link here after it's set in the first useEffect
+    if (selectedTeam) {
+      const itemsFound = table.filter(
+        (item) => item.data.team === selectedTeam.name
+      );
+      setSelectedItems(itemsFound);
+    }
+  }, [table, selectedTeam]);
+
+  useEffect(() => {
+    if (!table.length || !team.length) {
+      navigate("/");
+    }
+  }, [table, team, navigate]);
+
+  if (!selectedTeam || !selectedItems.length) {
+    return <Loader />;
+  }
 
   return (
-    <section className="relative mx-auto mt-24 mb-12">
+    <section className="relative mx-auto mt-10 mb-12">
       <div className="px-5 lg:px-0">
-        <Table data={table} />
+        <h2 className="font-mallufont text-[3rem] md:text-[2rem] text-lightblack text-center">
+          {selectedTeam ? selectedTeam.name : ""}
+        </h2>
+        <Table data={selectedItems} />
       </div>
     </section>
   );
