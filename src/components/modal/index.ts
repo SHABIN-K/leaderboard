@@ -22,8 +22,8 @@ export const individualScore: ScoreItem[] = [
 export const teamData = [
   { name: "പഞ്ചവാദ്യം", link: "panchavadyam" },
   { name: "പടയണി", link: "padayani" },
-  { name: "തെയ്യം", link: "teyyam" },
-  { name: "കുമ്മാട്ടി", link: "kummati" },
+  { name: "തെയ്യം", link: "theyyam" },
+  { name: "കുമ്മാട്ടി", link: "kummatti" },
 ];
 
 export const departmentData = [
@@ -51,12 +51,12 @@ export const itemsData = [
   { name: "Oppana", prize: groupScore },
   { name: "Dance", prize: groupScore },
   { name: "Duff Mutt (M)", prize: groupScore },
-  { name: "kathakali", prize: individualScore },
+  { name: "Kathakali", prize: individualScore },
   { name: "Light Music", prize: individualScore },
-  { name: "Clasic Music", prize: individualScore },
-  { name: "Mappilappattu(Individual)", prize: individualScore },
-  { name: "Recitation (Individual)", prize: individualScore },
-  { name: "Vocal-Western(Individual)", prize: individualScore },
+  { name: "Clasical Music", prize: individualScore },
+  { name: "Mappilappattu", prize: individualScore },
+  { name: "Recitation", prize: individualScore },
+  { name: "Vocal-Western", prize: individualScore },
   { name: "Bharathanatyam", prize: individualScore },
   { name: "Folk Dance", prize: individualScore },
   { name: "Mono Act", prize: individualScore },
