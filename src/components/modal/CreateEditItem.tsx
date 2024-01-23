@@ -4,7 +4,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import ComboBox from "../ui/ComboBox";
 import { FormDataProps } from "../../types";
 import { FormButtons, FormInput } from "../ui";
-import { departmentData, itemsData, prizeData, teamData } from ".";
+import { departmentData, itemsData, prizeData, teamData } from "../";
 
 interface CreateEditItemProps {
   onOpen: boolean;

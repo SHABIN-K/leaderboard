@@ -1,6 +1,6 @@
 import Fuse from "fuse.js";
-import React, { ChangeEvent, useMemo } from "react";
 import PropTypes from "prop-types";
+import React, { ChangeEvent, useMemo } from "react";
 import { TableDataProps } from "../types";
 
 interface SearchInputProps {
