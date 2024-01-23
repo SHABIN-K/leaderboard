@@ -1,6 +1,6 @@
-import data from "../utils/data.json";
+import { fetchStudent } from "../firebase";
 import { SearchInput, Table } from "../components";
-import { FormDataProps, TableDataType } from "../types";
+import { FormDataProps, TableDataProps } from "../types";
 import { auth, db, fireConfig } from "../firebase/firebase";
 import ProtectedDashboard from "../layout/ProtectedDashboard";
 import { CreateEditItem, prizeData, teamData } from "../components/modal";
@@ -59,17 +59,20 @@ const Header: React.FC = () => {
 };
 
 const DashBoard = () => {
-  const [tableData, setTableData] = useState<TableDataType[]>([]);
+  const [tableData, setTableData] = useState<TableDataProps[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchedData, setSearchedData] = useState<
-    TableDataType[] | undefined
+    FormDataProps[] | undefined
   >();
 
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setTableData(data.data);
+    const fetchData = async () => {
+      await fetchStudent(setTableData);
+    };
+    fetchData();
   }, []);
 
   const onCreate = async (newItem: FormDataProps) => {
@@ -115,38 +118,44 @@ const DashBoard = () => {
 
   return (
     <ProtectedDashboard>
-      <Header />
-      <div className="ml-5 mt-5 space-x-2">
-        <button className={styleDashboard.addbtn}>
-          <IoMdAdd className="w-4 h-4" />
-          Create Team
-        </button>
-        <button
-          onClick={() => setIsAddOpen(true)}
-          className={styleDashboard.addbtn}
-        >
-          <IoMdAdd className="w-4 h-4" />
-          Add item
-        </button>
-      </div>
-      <SearchInput
-        value={searchText}
-        setSearchText={setSearchText}
-        setSearchedData={setSearchedData}
-      />
-      <Table
-        data={searchText ? (searchedData as TableDataType[]) : tableData}
-      />
-      {isAddOpen && (
-        <CreateEditItem
-          onOpen={isAddOpen}
-          onClose={setIsAddOpen}
-          onSave={onCreate}
-          isLoading={isLoading}
-          title="Add student details"
-          btnLabel="Add"
+      <div className="mb-10">
+        <Header />
+        <div className="ml-5 mt-5 space-x-2">
+          <button className={styleDashboard.addbtn}>
+            <IoMdAdd className="w-4 h-4" />
+            Create Team
+          </button>
+          <button
+            onClick={() => setIsAddOpen(true)}
+            className={styleDashboard.addbtn}
+          >
+            <IoMdAdd className="w-4 h-4" />
+            Add item
+          </button>
+        </div>
+        <SearchInput
+          value={searchText}
+          setSearchText={setSearchText}
+          setSearchedData={setSearchedData}
         />
-      )}
+        <Table
+          data={
+            searchText
+              ? (searchedData as unknown as TableDataProps[])
+              : tableData
+          }
+        />
+        {isAddOpen && (
+          <CreateEditItem
+            onOpen={isAddOpen}
+            onClose={setIsAddOpen}
+            onSave={onCreate}
+            isLoading={isLoading}
+            title="Add student details"
+            btnLabel="Add"
+          />
+        )}
+      </div>
     </ProtectedDashboard>
   );
 };

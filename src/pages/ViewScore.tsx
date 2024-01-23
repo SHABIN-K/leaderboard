@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Table } from "../components";
-import { useTableStore, useTeamStore } from "../utils/store";
-import { TableDataProps, TeamProps } from "../types";
 import { Loader } from "../components/ui";
+import { TableDataProps, TeamProps } from "../types";
+import { useTableStore, useTeamStore } from "../utils/store";
 
 const ViewScore = () => {
   const navigate = useNavigate();
