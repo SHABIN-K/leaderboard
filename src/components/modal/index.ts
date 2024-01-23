@@ -15,9 +15,9 @@ export const groupScore: ScoreItem[] = [
 ];
 
 export const individualScore: ScoreItem[] = [
-  { name: "First", point: 10 },
-  { name: "Second", point: 5 },
-  { name: "Third", point: 3 },
+  { name: "First", point: 5},
+  { name: "Second", point: 3 },
+  { name: "Third", point: 1 },
 ];
 export const teamData = [
   { name: "പഞ്ചവാദ്യം", link: "panchavadyam" },

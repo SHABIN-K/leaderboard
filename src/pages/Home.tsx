@@ -5,6 +5,7 @@ import { fetchStudent, fetchTeam } from "../firebase";
 import { SearchInput, Table, TopCard } from "../components";
 import { generateConfetti } from "../utils/generateConfetti";
 import { FormDataProps, TableDataProps, TeamProps } from "../types";
+import { useTableStore } from "../utils/store";
 
 interface AppProps {}
 
@@ -58,6 +59,7 @@ const HeroSection: React.FC<{ team: TeamProps[] }> = ({ team }) => {
 };
 
 const Home: React.FC<AppProps> = () => {
+  const { table, setTable } = useTableStore();
   const [isLoading, setIsLoading] = useState(false);
 
   const [team, setTeam] = useState<TeamProps[]>([]);
@@ -76,6 +78,7 @@ const Home: React.FC<AppProps> = () => {
           await fetchTeam(setTeam);
           await fetchStudent(setTableData);
         } else {
+          setTable(tableData);
           generateConfetti();
         }
       } catch (error) {
@@ -84,9 +87,10 @@ const Home: React.FC<AppProps> = () => {
         setIsLoading(false);
       }
     };
-
+    
     fetchData();
   }, [team, setTeam, setTableData, setIsLoading]);
+  console.log(table);
 
   return (
     <>
