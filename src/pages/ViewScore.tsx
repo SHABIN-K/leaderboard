@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -16,19 +17,26 @@ const ViewScore = () => {
   const [selectedItems, setSelectedItems] = useState<TableDataProps[]>([]);
 
   useEffect(() => {
-    const teamFound = team.find((team) => team.link === title);
-    setSelectedTeam(teamFound || null);
-  }, [title, team]);
+    const fetchData = async () => {
+      try {
+        const teamFound = team.find((team) => team.link === title);
+        setSelectedTeam(teamFound || null);
 
-  useEffect(() => {
-    // Use selectedTeam.link here after it's set in the first useEffect
-    if (selectedTeam) {
-      const itemsFound = table.filter(
-        (item) => item.data.team === selectedTeam.name
-      );
-      setSelectedItems(itemsFound);
-    }
-  }, [table, selectedTeam]);
+        if (selectedTeam) {
+          const itemsFound = table.filter(
+            (item) => item.data.team === selectedTeam.name
+          );
+          setSelectedItems(itemsFound);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast("An error occurred while fetching data.");
+      }
+    };
+
+    fetchData();
+  }, [title, team, table, selectedTeam]);
+
 
   useEffect(() => {
     if (!table.length || !team.length) {
