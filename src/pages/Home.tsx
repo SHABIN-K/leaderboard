@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import { Loader } from "../components/ui";
-import { useTableStore, useTeamStore } from "../utils/store";
+import { TableDataProps, TeamProps } from "../types";
 import { fetchStudent, fetchTeam } from "../firebase";
 import { SearchInput, Table, TopCard } from "../components";
 import { generateConfetti } from "../utils/generateConfetti";
-import { TableDataProps, TeamProps } from "../types";
+import { useTableStore, useTeamStore } from "../utils/store";
 
 interface AppProps {}
 

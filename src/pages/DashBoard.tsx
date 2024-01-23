@@ -3,7 +3,7 @@ import { SearchInput, Table } from "../components";
 import { FormDataProps, TableDataProps } from "../types";
 import { auth, db, fireConfig } from "../firebase/firebase";
 import ProtectedDashboard from "../layout/ProtectedDashboard";
-import { CreateEditItem, prizeData, teamData } from "../components/modal";
+import { prizeData, teamData } from "../utils";
 
 import {
   addDoc,
@@ -18,6 +18,7 @@ import { signOut } from "firebase/auth";
 import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { CreateEditItem } from "../components/modal";
 
 const styleDashboard = {
   addbtn:
@@ -62,7 +63,7 @@ const DashBoard = () => {
   const [tableData, setTableData] = useState<TableDataProps[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchedData, setSearchedData] = useState<
-  TableDataProps[] | undefined
+    TableDataProps[] | undefined
   >();
 
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -77,6 +78,7 @@ const DashBoard = () => {
 
   const onCreate = async (newItem: FormDataProps) => {
     setIsLoading(true);
+    console.log(newItem);
 
     try {
       if (!newItem.name) {
