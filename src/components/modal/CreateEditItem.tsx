@@ -32,7 +32,7 @@ const CreateEditItem: React.FC<CreateEditItemProps> = ({
   data,
 }) => {
   const [formData, setFormData] = useState<FormDataProps>({
-    name: "",
+    name: "".trim(),
     department: departmentData[0]?.name ?? "",
     team: teamData[0]?.name ?? "",
     item: itemsData[0]?.name ?? "",

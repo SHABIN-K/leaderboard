@@ -1,24 +1,24 @@
 import { fetchStudent } from "../firebase";
+import { itemsData, teamData } from "../utils";
 import { SearchInput, Table } from "../components";
+import { CreateEditItem } from "../components/modal";
 import { FormDataProps, TableDataProps } from "../types";
 import { auth, db, fireConfig } from "../firebase/firebase";
 import ProtectedDashboard from "../layout/ProtectedDashboard";
-import { prizeData, teamData } from "../utils";
 
 import {
-  addDoc,
-  collection,
   doc,
+  addDoc,
   increment,
   Timestamp,
   updateDoc,
+  collection,
 } from "firebase/firestore";
 import { toast } from "sonner";
 import { signOut } from "firebase/auth";
 import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { CreateEditItem } from "../components/modal";
 
 const styleDashboard = {
   addbtn:
@@ -78,21 +78,22 @@ const DashBoard = () => {
 
   const onCreate = async (newItem: FormDataProps) => {
     setIsLoading(true);
-    console.log(newItem);
-
     try {
       if (!newItem.name) {
         toast("Name is required");
         return;
       }
-
       // Find the link based on newItem.team in teamData
       const teamLink = teamData.find(
         (team) => team.name === newItem.team
       )?.link;
-      // Find the point based on newItem. in teamData
-      const point = prizeData.find(
-        (prize) => prize.name === newItem.prize
+
+      const selectedPrize = itemsData.find(
+        (dataItem) => dataItem.name === newItem.item
+      )?.prize;
+
+      const point = selectedPrize?.find(
+        (score) => score.name === newItem.prize
       )?.point;
 
       const collectionRef = collection(db, fireConfig.collection);
@@ -106,6 +107,16 @@ const DashBoard = () => {
         await updateDoc(teamDocRef, {
           total_points: increment(point ?? 0),
         }).then(() => {
+          // Update the local state with the new item
+          setTableData((prevData) => [
+            ...prevData,
+            { data: newItem, date: new Date() },
+          ]);
+
+          // Sort the local state based on the date field
+          setTableData((prevData) =>
+            prevData.sort((a, b) => (a.date > b.date ? -1 : 1))
+          );
           toast("Created successfully");
         });
       });
