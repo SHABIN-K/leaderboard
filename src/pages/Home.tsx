@@ -77,6 +77,7 @@ const Home: React.FC<AppProps> = () => {
         if (team.length === 0) {
           await fetchTeam(setTeam);
           await fetchStudent(setTableData);
+          setTable(tableData);
         } else {
           setTable(tableData);
           generateConfetti();
@@ -87,10 +88,10 @@ const Home: React.FC<AppProps> = () => {
         setIsLoading(false);
       }
     };
-    
     fetchData();
+    setTable(tableData);
   }, [team, setTeam, setTableData, setIsLoading]);
-  console.log(table);
+console.log(table);
 
   return (
     <>

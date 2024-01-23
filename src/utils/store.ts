@@ -1,13 +1,14 @@
 import { create } from "zustand";
 import { TableDataProps } from "../types";
 
-interface State {
+interface studentState {
   table: TableDataProps[];
-  setTable: (newTableData: TableDataProps[]) => void;
+  setTable: (data: TableDataProps[]) => void;
 }
 
-// Create a Zustand store
-export const useTableStore = create<State>((set) => ({
+const useTableStore = create<studentState>((set) => ({
   table: [],
-  setTable: (newTableData) => set({ table: newTableData }),
+  setTable: (data) => set({ table: data }),
 }));
+
+export { useTableStore };
