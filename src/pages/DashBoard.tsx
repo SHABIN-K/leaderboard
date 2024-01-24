@@ -132,6 +132,59 @@ const DashBoard = () => {
     }
   };
 
+  const onUpdate = async (newItem: FormDataProps) => {
+    setEditLoading(true);
+    try {
+      if (!newItem.name) {
+        toast("Name is required");
+        return;
+      }
+  
+      // Find the link based on newItem.team in teamData
+      const teamLink = teamData.find((team) => team.name === newItem.team)?.link;
+  
+      const selectedPrize = itemsData.find(
+        (dataItem) => dataItem.name === newItem.item
+      )?.prize;
+  
+      const point = selectedPrize?.find(
+        (score) => score.name === newItem.prize
+      )?.point;
+  
+      const collectionRef = collection(db, fireConfig.collection);
+      const teamDocRef = doc(collectionRef, teamLink);
+      const subCollectionRef = collection(teamDocRef, fireConfig.subCollection);
+  
+      const documentRef = doc(subCollectionRef, 'your-document-id'); // Replace 'your-document-id' with the actual ID
+  
+      // Use updateDoc instead of addDoc for updating the existing document
+      await updateDoc(documentRef, {
+        data: newItem,
+        date: Timestamp.fromDate(new Date()),
+      });
+  
+      await updateDoc(teamDocRef, {
+        total_points: increment(point ?? 0),
+      });
+  
+      // Update the local state with the new item
+      setTableData((prevData) =>
+        prevData.map((item) =>
+          item.data === selected[0] ? { data: newItem, date: new Date() } : item
+        )
+      );
+  
+      toast("Updated successfully");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+      toast("Error updating document");
+    } finally {
+      setIsLoading(false);
+      setEditLoading(false);
+    }
+  };
+  
+
   return (
     <ProtectedDashboard>
       <div className="mb-10">
@@ -176,7 +229,7 @@ const DashBoard = () => {
           <CreateEditItem
             onOpen={editLoading}
             onClose={setEditLoading}
-            onSave={onCreate}
+            onSave={onUpdate}
             isLoading={isLoading}
             title="Edit student details"
             btnLabel="Edit"
