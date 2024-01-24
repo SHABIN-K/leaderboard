@@ -32,11 +32,16 @@ const UserCard = ({
   index: number;
   pathname: string;
 }) => {
-  const { setIsLoading } = useLoader();
   const { setSelected } = useSelectedStore();
+  const { setIsEdit, setDelIsConfirm } = useLoader();
 
   const handleEdit = (data: FormDataProps) => {
-    setIsLoading(true);
+    setIsEdit(true);
+    setSelected([data]);
+  };
+
+  const handleDelete = (data: FormDataProps) => {
+    setDelIsConfirm(true);
     setSelected([data]);
   };
   return (
@@ -80,7 +85,10 @@ const UserCard = ({
           >
             Edit
           </p>
-          <p className={`font-bold hover:bg-red-600 ${styleTable.actionBtn}`}>
+          <p
+            className={`font-bold hover:bg-red-600 ${styleTable.actionBtn}`}
+            onClick={() => handleDelete(data.data)}
+          >
             <TbHttpDelete className="w-8 h-8 " />
           </p>
         </td>

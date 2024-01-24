@@ -1,11 +1,11 @@
 import { fetchStudent } from "../firebase";
 import { itemsData, teamData } from "../utils";
 import { SearchInput, Table } from "../components";
-import { CreateEditItem } from "../components/modal";
 import { FormDataProps, TableDataProps } from "../types";
 import { auth, db, fireConfig } from "../firebase/firebase";
 import { useLoader, useSelectedStore } from "../utils/store";
 import ProtectedDashboard from "../layout/ProtectedDashboard";
+import { ConfirmModal, CreateEditItem } from "../components/modal";
 
 import {
   doc,
@@ -27,18 +27,10 @@ const styleDashboard = {
 };
 
 const Header: React.FC = () => {
-  const navigate = useNavigate();
+  const { setLogOutIsConfirm } = useLoader();
 
-  const handleSignOut = () => {
-    signOut(auth)
-      .then(() => {
-        toast("You have been successfully logged out. See you next time!");
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error(error);
-        toast("Oops! Something went wrong!");
-      });
+  const handleSignOutBtn = () => {
+    setLogOutIsConfirm(true);
   };
 
   return (
@@ -49,7 +41,7 @@ const Header: React.FC = () => {
         </div>
         <div className="flex items-center lg:order-2">
           <div
-            onClick={handleSignOut}
+            onClick={handleSignOutBtn}
             className="text-white focus:ring-4 bg-blue-600 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none focus:ring-gray-800 cursor-pointer"
           >
             Log out
@@ -61,8 +53,16 @@ const Header: React.FC = () => {
 };
 
 const DashBoard = () => {
+  const navigate = useNavigate();
   const { selected } = useSelectedStore();
-  const { isLoading: editLoading, setIsLoading: setEditLoading } = useLoader();
+  const {
+    isEdit,
+    setIsEdit,
+    isDelConfirm,
+    setDelIsConfirm,
+    isLogOutConfirm,
+    setLogOutIsConfirm,
+  } = useLoader();
   const [tableData, setTableData] = useState<TableDataProps[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchedData, setSearchedData] = useState<
@@ -78,6 +78,19 @@ const DashBoard = () => {
     };
     fetchData();
   }, []);
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        setLogOutIsConfirm(false);
+        toast("You have been successfully logged out. See you next time!");
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error(error);
+        toast("Oops! Something went wrong!");
+      });
+  };
 
   const onCreate = async (newItem: FormDataProps) => {
     setIsLoading(true);
@@ -133,57 +146,58 @@ const DashBoard = () => {
   };
 
   const onUpdate = async (newItem: FormDataProps) => {
-    setEditLoading(true);
+    setIsEdit(true);
     try {
       if (!newItem.name) {
         toast("Name is required");
         return;
       }
-  
+
       // Find the link based on newItem.team in teamData
-      const teamLink = teamData.find((team) => team.name === newItem.team)?.link;
-  
+      const teamLink = teamData.find(
+        (team) => team.name === newItem.team
+      )?.link;
+
       const selectedPrize = itemsData.find(
         (dataItem) => dataItem.name === newItem.item
       )?.prize;
-  
+
       const point = selectedPrize?.find(
         (score) => score.name === newItem.prize
       )?.point;
-  
+
       const collectionRef = collection(db, fireConfig.collection);
       const teamDocRef = doc(collectionRef, teamLink);
       const subCollectionRef = collection(teamDocRef, fireConfig.subCollection);
-  
-      const documentRef = doc(subCollectionRef, 'your-document-id'); // Replace 'your-document-id' with the actual ID
-  
+
+      const documentRef = doc(subCollectionRef, "your-document-id"); // Replace 'your-document-id' with the actual ID
+
       // Use updateDoc instead of addDoc for updating the existing document
       await updateDoc(documentRef, {
         data: newItem,
         date: Timestamp.fromDate(new Date()),
       });
-  
+
       await updateDoc(teamDocRef, {
         total_points: increment(point ?? 0),
       });
-  
+
       // Update the local state with the new item
       setTableData((prevData) =>
         prevData.map((item) =>
           item.data === selected[0] ? { data: newItem, date: new Date() } : item
         )
       );
-  
+
       toast("Updated successfully");
     } catch (error) {
       console.error("Error updating document: ", error);
       toast("Error updating document");
     } finally {
       setIsLoading(false);
-      setEditLoading(false);
+      setIsEdit(false);
     }
   };
-  
 
   return (
     <ProtectedDashboard>
@@ -225,15 +239,37 @@ const DashBoard = () => {
             btnLabel="Add"
           />
         )}
-        {editLoading && (
+        {isEdit && (
           <CreateEditItem
-            onOpen={editLoading}
-            onClose={setEditLoading}
+            onOpen={isEdit}
+            onClose={setIsEdit}
             onSave={onUpdate}
             isLoading={isLoading}
             title="Edit student details"
             btnLabel="Edit"
             data={selected[0]}
+          />
+        )}
+        {isDelConfirm && (
+          <ConfirmModal
+            onOpen={isDelConfirm}
+            onClose={setDelIsConfirm}
+            onConfirm={() => {
+              toast("successfully deleted");
+            }}
+            isLoading={isLoading}
+            title="Sign out"
+            btnLabel="Sign out"
+          />
+        )}
+        {isLogOutConfirm && (
+          <ConfirmModal
+            onOpen={isLogOutConfirm}
+            onClose={setLogOutIsConfirm}
+            onConfirm={handleSignOut}
+            isLoading={isLoading}
+            title="Sign out"
+            btnLabel="Sign out"
           />
         )}
       </div>

@@ -17,8 +17,12 @@ interface TeamState {
 }
 
 interface LoaderState {
-  isLoading: boolean;
-  setIsLoading: (newIsLoading: boolean) => void;
+  isEdit: boolean;
+  setIsEdit: (newIsLoading: boolean) => void;
+  isDelConfirm: boolean;
+  setDelIsConfirm: (newIsLoading: boolean) => void;
+  isLogOutConfirm: boolean;
+  setLogOutIsConfirm: (newIsLoading: boolean) => void;
 }
 
 const useTableStore = create<studentState>((set) => ({
@@ -32,8 +36,14 @@ const useTeamStore = create<TeamState>((set) => ({
 }));
 
 const useLoader = create<LoaderState>((set) => ({
-  isLoading: false,
-  setIsLoading: (newIsLoading: boolean) => set({ isLoading: newIsLoading }),
+  isEdit: false,
+  setIsEdit: (newIsLoading: boolean) => set({ isEdit: newIsLoading }),
+  isDelConfirm: false,
+  setDelIsConfirm: (newIsLoading: boolean) =>
+    set({ isDelConfirm: newIsLoading }),
+  isLogOutConfirm: false,
+  setLogOutIsConfirm: (newIsLoading: boolean) =>
+    set({ isLogOutConfirm: newIsLoading }),
 }));
 
 const useSelectedStore = create<selectedState>((set) => ({
