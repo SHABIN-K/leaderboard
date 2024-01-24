@@ -1,13 +1,24 @@
 import { create } from "zustand";
-import { TableDataProps, TeamProps } from "../types";
+import { FormDataProps, TableDataProps, TeamProps } from "../types";
 
 interface studentState {
   table: TableDataProps[];
   setTable: (data: TableDataProps[]) => void;
 }
+
+interface selectedState {
+  selected: FormDataProps[];
+  setSelected: (data: FormDataProps[]) => void;
+}
+
 interface TeamState {
   team: TeamProps[];
   setTeam: (data: TeamProps[]) => void;
+}
+
+interface LoaderState {
+  isLoading: boolean;
+  setIsLoading: (newIsLoading: boolean) => void;
 }
 
 const useTableStore = create<studentState>((set) => ({
@@ -20,4 +31,15 @@ const useTeamStore = create<TeamState>((set) => ({
   setTeam: (data) => set({ team: data }),
 }));
 
-export { useTableStore, useTeamStore };
+const useLoader = create<LoaderState>((set) => ({
+  isLoading: false,
+  setIsLoading: (newIsLoading: boolean) => set({ isLoading: newIsLoading }),
+}));
+
+const useSelectedStore = create<selectedState>((set) => ({
+  selected: [],
+  setSelected: (data) => set({ selected: data }),
+}));
+
+export { useTableStore, useTeamStore, useLoader, useSelectedStore };
+`1`;

@@ -4,6 +4,7 @@ import { SearchInput, Table } from "../components";
 import { CreateEditItem } from "../components/modal";
 import { FormDataProps, TableDataProps } from "../types";
 import { auth, db, fireConfig } from "../firebase/firebase";
+import { useLoader, useSelectedStore } from "../utils/store";
 import ProtectedDashboard from "../layout/ProtectedDashboard";
 
 import {
@@ -60,6 +61,8 @@ const Header: React.FC = () => {
 };
 
 const DashBoard = () => {
+  const { selected } = useSelectedStore();
+  const { isLoading: editLoading, setIsLoading: setEditLoading } = useLoader();
   const [tableData, setTableData] = useState<TableDataProps[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchedData, setSearchedData] = useState<
@@ -167,6 +170,17 @@ const DashBoard = () => {
             isLoading={isLoading}
             title="Add student details"
             btnLabel="Add"
+          />
+        )}
+        {editLoading && (
+          <CreateEditItem
+            onOpen={editLoading}
+            onClose={setEditLoading}
+            onSave={onCreate}
+            isLoading={isLoading}
+            title="Edit student details"
+            btnLabel="Edit"
+            data={selected[0]}
           />
         )}
       </div>
