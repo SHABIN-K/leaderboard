@@ -155,12 +155,18 @@ const DashBoard = () => {
   const onUpdate = async (newItem: FormDataProps) => {
     setIsLoading(true);
     try {
+      const currentItem = tableData.find(
+        (item) => item.data.id === selected[0].id
+      )?.data;
+      // console.log(currentItem);
+
+      const newItemWithId = { ...newItem, id: selected[0].id };
+
       if (!newItem.name) {
         toast("Name is required");
         return;
       }
 
-      // Find the link based on newItem.team in teamData
       const teamLink = teamData.find(
         (team) => team.name === newItem.team
       )?.link;
@@ -169,30 +175,44 @@ const DashBoard = () => {
         (dataItem) => dataItem.name === newItem.item
       )?.prize;
 
-      const point = selectedPrize?.find(
-        (score) => score.name === newItem.prize
-      )?.point;
+      const existingPoint: number = currentItem?.prize
+        ? (selectedPrize?.find((score) => score.name === currentItem.prize)
+            ?.point as number) || 0
+        : 0;
 
+      const newPoint: number =
+        selectedPrize?.find((score) => score.name === newItem.prize)?.point ||
+        0;
+
+      const pointDifference = newPoint - existingPoint;
+      console.log(pointDifference);
       const collectionRef = collection(db, fireConfig.collection);
       const teamDocRef = doc(collectionRef, teamLink);
       const subCollectionRef = collection(teamDocRef, fireConfig.subCollection);
 
-      const documentRef = doc(subCollectionRef, "your-document-id"); // Replace 'your-document-id' with the actual ID
+      const documentRef = doc(subCollectionRef, newItemWithId.id);
 
+      // eslint-disable-next-line no-constant-condition
+      if (true) {
+        toast("helo");
+        return;
+      }
       // Use updateDoc instead of addDoc for updating the existing document
       await updateDoc(documentRef, {
-        data: newItem,
+        data: newItemWithId,
         date: Timestamp.fromDate(new Date()),
       });
 
       await updateDoc(teamDocRef, {
-        total_points: increment(point ?? 0),
+        total_points: increment(pointDifference),
       });
 
       // Update the local state with the new item
       setTableData((prevData) =>
         prevData.map((item) =>
-          item.data === selected[0] ? { data: newItem, date: new Date() } : item
+          item.data.id === newItemWithId.id
+            ? { data: newItemWithId, date: new Date() }
+            : item
         )
       );
 
@@ -201,6 +221,7 @@ const DashBoard = () => {
       console.error("Error updating document: ", error);
       toast("Error updating document");
     } finally {
+      setSelected([]);
       setIsLoading(false);
       setIsEdit(false);
     }
@@ -237,7 +258,7 @@ const DashBoard = () => {
 
       // Update the score in Firestore
       await updateDoc(teamDocRef, {
-        total_points: increment(-point), // Subtract the deleted score
+        total_points: increment(-point),
       });
 
       setTableData((prevData) =>
