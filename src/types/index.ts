@@ -12,6 +12,7 @@ export interface DatabaseData {
 }
 
 export interface FormDataProps {
+  id?: string;
   name: string;
   department: string;
   team: string;

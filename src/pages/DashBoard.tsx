@@ -9,13 +9,15 @@ import { ConfirmModal, CreateEditItem } from "../components/modal";
 
 import {
   doc,
-  addDoc,
   increment,
   Timestamp,
   updateDoc,
   collection,
+  setDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
 import { signOut } from "firebase/auth";
 import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
@@ -54,7 +56,7 @@ const Header: React.FC = () => {
 
 const DashBoard = () => {
   const navigate = useNavigate();
-  const { selected } = useSelectedStore();
+  const { selected, setSelected } = useSelectedStore();
   const {
     isEdit,
     setIsEdit,
@@ -95,6 +97,9 @@ const DashBoard = () => {
   const onCreate = async (newItem: FormDataProps) => {
     setIsLoading(true);
     try {
+      const uniqueId = uuidv4();
+      const newItemWithId = { ...newItem, id: uniqueId };
+
       if (!newItem.name) {
         toast("Name is required");
         return;
@@ -115,27 +120,29 @@ const DashBoard = () => {
       const collectionRef = collection(db, fireConfig.collection);
       const teamDocRef = doc(collectionRef, teamLink);
       const subCollectionRef = collection(teamDocRef, fireConfig.subCollection);
+      const subCollectionItemRef = doc(subCollectionRef, uniqueId);
 
-      await addDoc(subCollectionRef, {
-        data: newItem,
+      await setDoc(subCollectionItemRef, {
+        data: newItemWithId,
         date: Timestamp.fromDate(new Date()),
-      }).then(async () => {
-        await updateDoc(teamDocRef, {
-          total_points: increment(point ?? 0),
-        }).then(() => {
-          // Update the local state with the new item
-          setTableData((prevData) => [
-            ...prevData,
-            { data: newItem, date: new Date() },
-          ]);
-
-          // Sort the local state based on the date field
-          setTableData((prevData) =>
-            prevData.sort((a, b) => (a.date > b.date ? -1 : 1))
-          );
-          toast("Created successfully");
-        });
       });
+
+      await updateDoc(teamDocRef, {
+        total_points: increment(point ?? 0),
+      });
+
+      // Update the local state with the new item
+      setTableData((prevData) => [
+        ...prevData,
+        { data: newItem, date: new Date() },
+      ]);
+
+      // Sort the local state based on the date field
+      setTableData((prevData) =>
+        prevData.sort((a, b) => (a.date > b.date ? -1 : 1))
+      );
+
+      toast("Created successfully");
     } catch (error) {
       console.error("Error creating document: ", error);
       toast("Error creating document");
@@ -146,7 +153,7 @@ const DashBoard = () => {
   };
 
   const onUpdate = async (newItem: FormDataProps) => {
-    setIsEdit(true);
+    setIsLoading(true);
     try {
       if (!newItem.name) {
         toast("Name is required");
@@ -196,6 +203,55 @@ const DashBoard = () => {
     } finally {
       setIsLoading(false);
       setIsEdit(false);
+    }
+  };
+
+  const onDelete = async () => {
+    setIsLoading(true);
+    try {
+      const teamLink = teamData.find(
+        (team) => team.name === selected[0].team
+      )?.link;
+
+      const selectedPrize = itemsData.find(
+        (dataItem) => dataItem.name === selected[0].item
+      )?.prize;
+
+      const point = selectedPrize?.find(
+        (score) => score.name === selected[0].prize
+      )?.point;
+
+      if (point === undefined) {
+        console.error("Error: Point is undefined");
+        return;
+      }
+
+      const collectionRef = collection(db, fireConfig.collection);
+      const teamDocRef = doc(collectionRef, teamLink);
+      const subCollectionRef = collection(teamDocRef, fireConfig.subCollection);
+
+      const documentRef = doc(subCollectionRef, selected[0].id);
+
+      // Delete the document from Firestore
+      await deleteDoc(documentRef);
+
+      // Update the score in Firestore
+      await updateDoc(teamDocRef, {
+        total_points: increment(-point), // Subtract the deleted score
+      });
+
+      setTableData((prevData) =>
+        prevData.filter((item) => item.data.id !== selected[0].id)
+      );
+
+      toast("Successfully deleted");
+    } catch (error) {
+      console.error("Error deleting document: ", error);
+      toast("Error deleting document");
+    } finally {
+      setSelected([]);
+      setIsLoading(false);
+      setDelIsConfirm(false);
     }
   };
 
@@ -254,12 +310,10 @@ const DashBoard = () => {
           <ConfirmModal
             onOpen={isDelConfirm}
             onClose={setDelIsConfirm}
-            onConfirm={() => {
-              toast("successfully deleted");
-            }}
+            onConfirm={onDelete}
             isLoading={isLoading}
-            title="Sign out"
-            btnLabel="Sign out"
+            title="Delete file..."
+            btnLabel="Delete"
           />
         )}
         {isLogOutConfirm && (
