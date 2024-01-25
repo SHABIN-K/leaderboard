@@ -21,17 +21,11 @@ const Header: React.FC<{ lastUpdatedDate: TableDataProps[] }> = ({
 
   return (
     <div className="relative my-10 mx-auto flex-center flex-col text-center lg:mx-8 sm:mx-2">
-      {/* <h2 className="my-1.5 pt-0 px-2 pb-2 font-['sadhise'] text-[5rem] font-bold text-lightblack tracking-[4px] rounded-lg md:text-[3rem]">
-        Kalaavathara 2k24
-  </h2>*/}
-
-        <img
-          src="/logo_art.png"
-          alt="logo arts "
-          className="w-[450px] h-full user_image"
-        />
- 
-     
+      <img
+        src="/logo_art.png"
+        alt="logo arts"
+        className="w-[570px] h-full user_image px-2"
+      />
       {firstItemDate !== null ? (
         <p className={`my-2 text-lg ${styleApp.font}`}>
           Last updated on:
