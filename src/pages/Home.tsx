@@ -31,7 +31,7 @@ const Header: React.FC<{ lastUpdatedDate: TableDataProps[] }> = ({
           className="w-[450px] h-full user_image"
         />
  
-      <p className={`my-4 text-2xl ${styleApp.font}`}>Check your rank here!</p>
+     
       {firstItemDate !== null ? (
         <p className={`my-2 text-lg ${styleApp.font}`}>
           Last updated on:
