@@ -9,7 +9,7 @@ export const generateConfetti = () => {
     confetti({
       particleCount: 5,
       angle: 60,
-      spread: 1000,
+      spread: 500,
       origin: { y: 0 },
       colors: colors,
       shapes: ["circle", "square"],
