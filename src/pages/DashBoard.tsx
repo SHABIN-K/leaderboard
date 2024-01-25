@@ -158,7 +158,6 @@ const DashBoard = () => {
       const currentItem = tableData.find(
         (item) => item.data.id === selected[0].id
       )?.data;
-      // console.log(currentItem);
 
       const newItemWithId = { ...newItem, id: selected[0].id };
 
@@ -185,18 +184,13 @@ const DashBoard = () => {
         0;
 
       const pointDifference = newPoint - existingPoint;
-      console.log(pointDifference);
+
       const collectionRef = collection(db, fireConfig.collection);
       const teamDocRef = doc(collectionRef, teamLink);
       const subCollectionRef = collection(teamDocRef, fireConfig.subCollection);
 
       const documentRef = doc(subCollectionRef, newItemWithId.id);
 
-      // eslint-disable-next-line no-constant-condition
-      if (true) {
-        toast("helo");
-        return;
-      }
       // Use updateDoc instead of addDoc for updating the existing document
       await updateDoc(documentRef, {
         data: newItemWithId,
@@ -281,10 +275,10 @@ const DashBoard = () => {
       <div className="mb-10">
         <Header />
         <div className="ml-5 mt-5 space-x-2">
-          <button className={styleDashboard.addbtn}>
+          {/* <button className={styleDashboard.addbtn}>
             <IoMdAdd className="w-4 h-4" />
             Create Team
-          </button>
+  </button>*/}
           <button
             onClick={() => setIsAddOpen(true)}
             className={styleDashboard.addbtn}
